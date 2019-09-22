@@ -531,7 +531,7 @@ void AntiAim::CreateMove(CUserCmd* cmd)
 
     CCSGOAnimState* animState = localplayer->GetAnimState();
     if( Settings::AntiAim::LBYBreaker::enabled ){
-        if( CreateMove::sendPacket && (vel2D >= 0.1f || !(localplayer->GetFlags() & FL_ONGROUND) || localplayer->GetFlags() & FL_FROZEN) ){
+        if( vel2D >= 0.1f || !(localplayer->GetFlags() & FL_ONGROUND) || localplayer->GetFlags() & FL_FROZEN ){
         	// todo: add first choked tick check
             lbyBreak = false;
             lastCheck = globalVars->curtime;

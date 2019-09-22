@@ -74,8 +74,8 @@ void RegisterTick()
     LagComp::ticks.insert(LagComp::ticks.begin(), {globalVars->tickcount, globalVars->curtime});
     auto& cur = LagComp::ticks[0];
 
-    while (LagComp::ticks.size() > 40) // just to be shure that i'm not fucking up something
-        LagComp::ticks.pop_back();
+    // while (LagComp::ticks.size() > 40) // i think i don't really need that
+    //     LagComp::ticks.pop_back();
  
     RemoveBadRecords(LagComp::ticks);
 
@@ -149,15 +149,14 @@ void LagComp::FrameStageNotify(ClientFrameStage_t stage){
     if (!Settings::LagComp::enabled)
         return;
 
-    if (stage == ClientFrameStage_t::FRAME_RENDER_START)
+    if (stage == ClientFrameStage_t::FRAME_NET_UPDATE_POSTDATAUPDATE_START)
     {
-        /*RegisterTick();*/
+        RegisterTick();
     }
 }
 
 void LagComp::CreateMove(CUserCmd* cmd){
     if (!Settings::LagComp::enabled)
         return;
-    RegisterTick();
     Begin(cmd);
 }
