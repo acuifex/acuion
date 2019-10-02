@@ -8,6 +8,8 @@
 #include "../settings.h"
 #include "../interfaces.h"
 
+#include "../Utils/draw.h"
+
 
 // Default aimbot settings
 bool Settings::Aimbot::enabled = false;
@@ -134,12 +136,16 @@ static bool HeadMultiPoint(C_BasePlayer *player, Vector points[])
 	return true;
 }
 
-bool HitChance(Vector bestSpot, C_BasePlayer* player, C_BaseCombatWeapon* activeWeapon)
+bool Aimbot::HitChance(Vector bestSpot, C_BaseEntity* player, C_BaseCombatWeapon* activeWeapon)
 {
     C_BasePlayer* localplayer = (C_BasePlayer*) entityList->GetClientEntity(engine->GetLocalPlayer());
 
     Vector src = localplayer->GetEyePosition();
     QAngle angle = Math::CalcAngle(src, bestSpot);
+
+	Vector forward, right, up;
+    Math::AngleVectors(angle, forward, right, up);
+
     int hitCount = 0;
     int NeededHits = static_cast<int>(150.f * (Settings::Aimbot::HitChance::value / 100.f));
 
@@ -149,26 +155,38 @@ bool HitChance(Vector bestSpot, C_BasePlayer* player, C_BaseCombatWeapon* active
 
     for (int i = 0; i < 150; i++) {
     	RandomSeed(i + 1); // if we can't calculate spread like game does, then at least use same functions XD
-        float a = RandomFloat(0.f, 2.f * (float)M_PI);
-        float b = weap_spread * RandomFloat(0.f, 1.f);
-        float c = RandomFloat(0.f, 2.f * (float)M_PI);
-        float d = weap_inaccuracy * RandomFloat(0.f, 1.f);
+        float b = RandomFloat(0.f, 2.f * (float)M_PI);
+        float spread = weap_spread * RandomFloat(0.f, 1.0f);
+        float d = RandomFloat(0.f, 2.f * (float)M_PI);
+        float inaccuracy = weap_inaccuracy * RandomFloat(0.f, 1.0f);
 
-        Vector dir, dest;
+        Vector spreadView((cos(b) * inaccuracy) + (cos(d) * spread), (sin(b) * inaccuracy) + (sin(d) * spread), 0), direction;
 
-        QAngle angles = angle;
-        angles.x += (cos(a) * b) + (cos(c) * d);
-        angles.y += (sin(a) * b) + (sin(c) * d);
-        Math::AngleVectors(angles, dir);
-        dest = src + (dir * 8192);
+        direction.x = forward.x + (spreadView.x * right.x) + (spreadView.y * up.x);
+		direction.y = forward.y + (spreadView.x * right.y) + (spreadView.y * up.y);
+		direction.z = forward.z + (spreadView.x * right.z) + (spreadView.y * up.z);
+		direction.Normalize();
+
+        QAngle viewAnglesSpread;
+        Math::VectorAngles(direction, up, viewAnglesSpread);
+		Math::NormalizeAngles(viewAnglesSpread);
+
+		Vector viewForward;
+		Math::AngleVectors(viewAnglesSpread, viewForward);
+		viewForward.NormalizeInPlace();
+
+		viewForward = src + (viewForward * activeWeapon->GetCSWpnData()->GetRange());
 
         trace_t tr;
         Ray_t ray;
         CTraceFilter filter;
 
-        ray.Init(src, dest);
+        ray.Init(src, viewForward);
         filter.pSkip = localplayer;
         trace->TraceRay(ray, MASK_SHOT, &filter, &tr);
+        Vector dst;
+        if (debugOverlay->ScreenPosition( viewForward, dst ))
+        	Draw::AddCircleFilled( dst.x, dst.y, Settings::ESP::HeadDot::size, ImColor(255, 0, 0, 255), 3 );
 		
         if (tr.m_pEntityHit == player)
             hitCount++;
