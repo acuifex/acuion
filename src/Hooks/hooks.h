@@ -8,6 +8,7 @@ namespace Hooks
 {
 	/* Client */
 	void FrameStageNotify(void* thisptr, ClientFrameStage_t stage);
+	void DispatchUserMessage(void* thisptr, unsigned int msg_type, unsigned int unk1, unsigned int nBytes, const void* msg_data);
 
 	/* ClientMode */
 	void OverrideView(void* thisptr, CViewSetup* pSetup);

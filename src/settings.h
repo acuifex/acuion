@@ -151,6 +151,12 @@ enum class ShowedAngle : int
     FAKE,
 };
 
+enum class AntiAimYaw_Preset : int
+{
+	DIY,
+	JITTER
+};
+
 enum class AntiAimYaw_Real : int
 {
 	SPIN_SLOW,
@@ -590,6 +596,11 @@ namespace Settings
         {
             extern bool noEnemy;
             extern bool knifeHeld;
+        }
+
+        namespace Preset
+        {
+            extern AntiAimYaw_Preset type;
         }
 
         namespace Yaw

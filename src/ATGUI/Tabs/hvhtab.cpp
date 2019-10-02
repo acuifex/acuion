@@ -23,86 +23,103 @@ void HvH::RenderTab()
 			"LEFT", "RIGHT", "JITTER", "MANUAL"
 	};
 
+	const char* pTypes[] = {
+			"DIY", "JITTER"
+	};
+
     ImGui::Columns(2, nullptr, true);
     {
         ImGui::BeginChild(XORSTR("HVH1"), ImVec2(0, 0), true);
         {
-			ImGui::Text(XORSTR("AntiAim"));
+        	ImGui::Columns(2, NULL, true);
+        	{
+				ImGui::Text(XORSTR("AntiAim"));
+        	}
+        	ImGui::NextColumn();
+        	{
+				ImGui::PushItemWidth(-1);
+				ImGui::Combo(XORSTR("##PRESETTYPE"), (int*)& Settings::AntiAim::Preset::type, pTypes, IM_ARRAYSIZE(pTypes));
+
+				ImGui::PopItemWidth();
+			}
+			ImGui::Columns(1);
 			ImGui::BeginChild(XORSTR("##ANTIAIM"), ImVec2(0, 0), true);
 			{
-				ImGui::Checkbox(XORSTR("Yaw"), &Settings::AntiAim::Yaw::enabled);
-				ImGui::Separator();
-				ImGui::Columns(2, NULL, true);
+				if(Settings::AntiAim::Preset::type == AntiAimYaw_Preset::DIY)
 				{
-					ImGui::ItemSize(ImVec2(0.0f, 0.0f), 0.0f);
-					ImGui::Text(XORSTR("Yaw Actual"));
-
-				}
-				ImGui::NextColumn();
-				{
-					ImGui::PushItemWidth(-1);
-
-					if (ImGui::Combo(XORSTR("##YACTUALTYPE"), (int*)& Settings::AntiAim::Yaw::type, yTypes, IM_ARRAYSIZE(yTypes)))
+					ImGui::Checkbox(XORSTR("Yaw"), &Settings::AntiAim::Yaw::enabled);
+					ImGui::Separator();
+					ImGui::Columns(2, NULL, true);
 					{
-						if (!ValveDSCheck::forceUT && ((*csGameRules) && (*csGameRules)->IsValveDS()) && Settings::AntiAim::Yaw::type >= AntiAimYaw_Real::LISP)
+						ImGui::ItemSize(ImVec2(0.0f, 0.0f), 0.0f);
+						ImGui::Text(XORSTR("Yaw Actual"));
+
+					}
+					ImGui::NextColumn();
+					{
+						ImGui::PushItemWidth(-1);
+
+						if (ImGui::Combo(XORSTR("##YACTUALTYPE"), (int*)& Settings::AntiAim::Yaw::type, yTypes, IM_ARRAYSIZE(yTypes)))
 						{
-							Settings::AntiAim::Yaw::type = AntiAimYaw_Real::SPIN_SLOW;
-							ImGui::OpenPopup(XORSTR("Error###UNTRUSTED_AA"));
+							if (!ValveDSCheck::forceUT && ((*csGameRules) && (*csGameRules)->IsValveDS()) && Settings::AntiAim::Yaw::type >= AntiAimYaw_Real::LISP)
+							{
+								Settings::AntiAim::Yaw::type = AntiAimYaw_Real::SPIN_SLOW;
+								ImGui::OpenPopup(XORSTR("Error###UNTRUSTED_AA"));
+							}
 						}
+
+						ImGui::PopItemWidth();
+					}
+					ImGui::Columns(1);
+					ImGui::SliderFloat(XORSTR("##REALOFFSET"), &Settings::AntiAim::Yaw::offset, 0, 360, "Yaw Offset: %0.f");
+					ImGui::Columns(1);
+					ImGui::Separator();
+					ImGui::Checkbox(XORSTR("Pitch"), &Settings::AntiAim::Pitch::enabled);
+					ImGui::Separator();
+					ImGui::Columns(2, NULL, true);
+					{
+						ImGui::ItemSize(ImVec2(0.0f, 0.0f), 0.0f);
+						ImGui::Text(XORSTR("Pitch Actual"));
+					}
+					ImGui::NextColumn();
+					{
+						ImGui::PushItemWidth(-1);
+						if (ImGui::Combo(XORSTR("##XTYPE"), (int*)& Settings::AntiAim::Pitch::type, xTypes, IM_ARRAYSIZE(xTypes)))
+						{
+							if (!ValveDSCheck::forceUT && ((*csGameRules) && (*csGameRules)->IsValveDS()) && Settings::AntiAim::Pitch::type >= AntiAimType_X::LISP_DOWN)
+							{
+								Settings::AntiAim::Pitch::type = AntiAimType_X::STATIC_UP;
+								ImGui::OpenPopup(XORSTR("Error###UNTRUSTED_AA"));
+							}
+						}
+						ImGui::PopItemWidth();
+					}
+					ImGui::Columns(1);
+					ImGui::Separator();
+					ImGui::Columns(2, NULL, true);
+					{
+						ImGui::Checkbox(XORSTR("Desync Yaw"), &Settings::AntiAim::Fake::enabled);
+					}
+					ImGui::NextColumn();
+					{
+						ImGui::PushItemWidth(-1);
+						ImGui::Checkbox(XORSTR("Desync fail fix (Bad for legit aa)"), &Settings::AntiAim::RageDesyncFix::enabled);
+						ImGui::PopItemWidth();
 					}
 
-					ImGui::PopItemWidth();
-				}
-				ImGui::Columns(1);
-				ImGui::SliderFloat(XORSTR("##REALOFFSET"), &Settings::AntiAim::Yaw::offset, 0, 360, "Yaw Offset: %0.f");
-				ImGui::Columns(1);
-				ImGui::Separator();
-				ImGui::Checkbox(XORSTR("Pitch"), &Settings::AntiAim::Pitch::enabled);
-				ImGui::Separator();
-				ImGui::Columns(2, NULL, true);
-				{
-					ImGui::ItemSize(ImVec2(0.0f, 0.0f), 0.0f);
-					ImGui::Text(XORSTR("Pitch Actual"));
-				}
-				ImGui::NextColumn();
-				{
-					ImGui::PushItemWidth(-1);
-					if (ImGui::Combo(XORSTR("##XTYPE"), (int*)& Settings::AntiAim::Pitch::type, xTypes, IM_ARRAYSIZE(xTypes)))
+					ImGui::Separator();
+					ImGui::Columns(2, NULL, true);
 					{
-						if (!ValveDSCheck::forceUT && ((*csGameRules) && (*csGameRules)->IsValveDS()) && Settings::AntiAim::Pitch::type >= AntiAimType_X::LISP_DOWN)
-						{
-							Settings::AntiAim::Pitch::type = AntiAimType_X::STATIC_UP;
-							ImGui::OpenPopup(XORSTR("Error###UNTRUSTED_AA"));
-						}
+						ImGui::ItemSize(ImVec2(0.0f, 0.0f), 0.0f);
+						ImGui::Text(XORSTR("Desync"));
 					}
-					ImGui::PopItemWidth();
+					ImGui::NextColumn();
+					{
+						ImGui::PushItemWidth(-1);
+						ImGui::Combo(XORSTR("##YAWFAKETYPE"), (int*)& Settings::AntiAim::Fake::type, fTypes, IM_ARRAYSIZE(fTypes));
+						ImGui::PopItemWidth();
+					}
 				}
-				ImGui::Columns(1);
-				ImGui::Separator();
-				ImGui::Columns(2, NULL, true);
-				{
-					ImGui::Checkbox(XORSTR("Desync Yaw"), &Settings::AntiAim::Fake::enabled);
-				}
-				ImGui::NextColumn();
-				{
-					ImGui::PushItemWidth(-1);
-					ImGui::Checkbox(XORSTR("Desync fail fix (Bad for legit aa)"), &Settings::AntiAim::RageDesyncFix::enabled);
-					ImGui::PopItemWidth();
-				}
-
-				ImGui::Separator();
-				ImGui::Columns(2, NULL, true);
-				{
-					ImGui::ItemSize(ImVec2(0.0f, 0.0f), 0.0f);
-					ImGui::Text(XORSTR("Desync"));
-				}
-				ImGui::NextColumn();
-				{
-					ImGui::PushItemWidth(-1);
-					ImGui::Combo(XORSTR("##YAWFAKETYPE"), (int*)& Settings::AntiAim::Fake::type, fTypes, IM_ARRAYSIZE(fTypes));
-					ImGui::PopItemWidth();
-				}
-
                 ImGui::Columns(1);
                 ImGui::Separator();
                 ImGui::Text(XORSTR("Disable"));

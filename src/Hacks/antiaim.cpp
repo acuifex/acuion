@@ -15,6 +15,7 @@ bool Settings::AntiAim::Fake::enabled = false;
 bool Settings::AntiAim::RageDesyncFix::enabled = false;
 bool Settings::AntiAim::Pitch::enabled = false;
 
+AntiAimYaw_Preset Settings::AntiAim::Preset::type = AntiAimYaw_Preset::DIY;
 AntiAimYaw_Real Settings::AntiAim::Yaw::type = AntiAimYaw_Real::BACKWARDS;
 AntiAimYaw_Fake Settings::AntiAim::Fake::type = AntiAimYaw_Fake::JITTER;
 AntiAimType_X Settings::AntiAim::Pitch::type = AntiAimType_X::STATIC_DOWN;
@@ -215,6 +216,37 @@ static C_BasePlayer* GetClosestPlayer()
     }
 
     return tmp;
+}
+
+static void DoAntiAimPreset(QAngle& angle, bool bSend, CCSGOAnimState* animState)
+{
+	float maxDelta = AntiAim::GetMaxDelta(animState);
+	float halfDelta = maxDelta / 2;
+	static bool yFlip = false;
+
+	switch (Settings::AntiAim::Preset::type)
+	{
+		case AntiAimYaw_Preset::JITTER:
+			angle.x = 89.0f;
+			if(yFlip)
+				angle.y += manualswitch ? halfDelta : -halfDelta;
+			else
+				angle.y += manualswitch ? -halfDelta + 180.0f : halfDelta + 180.0f;
+
+			if(!bSend)
+			{
+				if(yFlip)
+					angle.y += manualswitch ? -maxDelta : maxDelta;
+				else
+					angle.y += manualswitch ? maxDelta : -maxDelta;
+			}
+			else
+				yFlip = !yFlip;
+
+			break;
+
+	}
+
 }
 
 static void DoAntiAimY(QAngle& angle, bool& clamp, CCSGOAnimState* animState)
@@ -475,7 +507,7 @@ void AntiAim::CreateMove(CUserCmd* cmd)
     float oldForward = cmd->forwardmove;
     float oldSideMove = cmd->sidemove;
     
-    AntiAim::realAngle = AntiAim::fakeAngle = CreateMove::lastTickViewAngles;
+    // AntiAim::realAngle = AntiAim::fakeAngle = CreateMove::lastTickViewAngles;
 
     QAngle angle = cmd->viewangles;
 
@@ -532,19 +564,18 @@ void AntiAim::CreateMove(CUserCmd* cmd)
     CCSGOAnimState* animState = localplayer->GetAnimState();
     if( Settings::AntiAim::LBYBreaker::enabled ){
         if( vel2D >= 0.1f || !(localplayer->GetFlags() & FL_ONGROUND) || localplayer->GetFlags() & FL_FROZEN ){
-        	// todo: add first choked tick check
             lbyBreak = false;
             lastCheck = globalVars->curtime;
             nextUpdate = globalVars->curtime + 0.22;
         } else {
             if( !lbyBreak && ( globalVars->curtime - lastCheck ) > 0.22 ){
-                tempangle = Settings::AntiAim::LBYBreaker::manual ? manualswitch ? 57.5f + Settings::AntiAim::LBYBreaker::offset : -57.5f + -Settings::AntiAim::LBYBreaker::offset : Settings::AntiAim::LBYBreaker::offset;
+                tempangle = Settings::AntiAim::LBYBreaker::manual ? manualswitch ? /*57.5f +*/ Settings::AntiAim::LBYBreaker::offset : /*-57.5f +*/ -Settings::AntiAim::LBYBreaker::offset : Settings::AntiAim::LBYBreaker::offset;
                 lbyBreak = true;
                 lastCheck = globalVars->curtime;
                 nextUpdate = globalVars->curtime + 1.1;
                 needToFlick = true;
             } else if( lbyBreak && ( globalVars->curtime - lastCheck ) > 1.1 ){
-                tempangle = Settings::AntiAim::LBYBreaker::manual ? manualswitch ? 57.5f + Settings::AntiAim::LBYBreaker::offset : -57.5f + -Settings::AntiAim::LBYBreaker::offset : Settings::AntiAim::LBYBreaker::offset;
+                tempangle = Settings::AntiAim::LBYBreaker::manual ? manualswitch ? /*57.5f +*/ Settings::AntiAim::LBYBreaker::offset : /*-57.5f +*/ -Settings::AntiAim::LBYBreaker::offset : Settings::AntiAim::LBYBreaker::offset;
                 lbyBreak = true;
                 lastCheck = globalVars->curtime;
                 nextUpdate = globalVars->curtime + 1.1;
@@ -552,7 +583,20 @@ void AntiAim::CreateMove(CUserCmd* cmd)
             }
         }
     }
+    if(Settings::AntiAim::Preset::type != AntiAimYaw_Preset::DIY)
+    {
+        if ((nextUpdate - globalVars->interval_per_tick) >= globalVars->curtime && nextUpdate <= globalVars->curtime)
+        	CreateMove::sendPacket = false;
 
+        if (needToFlick){
+        CreateMove::sendPacket = false;
+        angle.y += tempangle;
+    	}
+    	else
+    	DoAntiAimPreset(angle, bSend, animState);
+    }
+    else
+    {
     if (Settings::AntiAim::Yaw::enabled)
     {
         DoAntiAimY(angle, should_clamp, animState);
@@ -602,7 +646,7 @@ void AntiAim::CreateMove(CUserCmd* cmd)
 
     if (Settings::AntiAim::Pitch::enabled)
         DoAntiAimX(angle, bSend, should_clamp);
-
+	}
     if( should_clamp ){
         Math::NormalizeAngles(angle);
         Math::ClampAngles(angle);

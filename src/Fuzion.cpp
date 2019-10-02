@@ -64,6 +64,7 @@ void MainThread()
 
     clientVMT = new VMT(client);
     clientVMT->HookVM(Hooks::FrameStageNotify, 37);
+    clientVMT->HookVM(Hooks::DispatchUserMessage, 38);
 	clientVMT->ApplyVMT();
 
     clientModeVMT = new VMT(clientMode);
