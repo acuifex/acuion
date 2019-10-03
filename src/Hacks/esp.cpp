@@ -2,7 +2,6 @@
 
 #include "esp.h"
 #include "autowall.h"
-#include "aimbot.h"
 #include "lagcomp.h"
 #include "../fonts.h"
 #include "../settings.h"

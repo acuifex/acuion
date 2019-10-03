@@ -178,11 +178,9 @@ bool HitChance(Vector bestSpot, C_BaseEntity* player, C_BaseCombatWeapon* active
 
         trace_t tr;
         Ray_t ray;
-        CTraceFilter filter;
 
         ray.Init(src, viewForward);
-        filter.pSkip = localplayer;
-        trace->TraceRay(ray, MASK_SHOT, &filter, &tr);
+        trace->ClipRayToEntity(ray, MASK_SHOT | CONTENTS_GRATE, player, &tr);
 
         if (tr.m_pEntityHit == player)
             hitCount++;
