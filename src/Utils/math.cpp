@@ -174,7 +174,7 @@ void Math::VectorAngles(const Vector& forward, QAngle &angles)
 	angles[2] = 0.0f;
 }
 
-void VectorAngles(const Vector& forward, Vector& up, QAngle& angles)
+void Math::VectorAngles(const Vector& forward, Vector& up, QAngle& angles)
 {
     Vector left = CrossProduct(up, forward);
     left.NormalizeInPlace();

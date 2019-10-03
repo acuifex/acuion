@@ -636,25 +636,6 @@ static void DrawBulletTrace( C_BasePlayer* player ) {
 	Draw::AddLine( src.x, src.y, dst.x, dst.y, ESP::GetESPPlayerColor( player, true ) );
 	// Draw::AddRectFilled( ( int ) ( dst.x - 3 ), ( int ) ( dst.y - 3 ), 6, 6, ESP::GetESPPlayerColor( player, false ) ); // do we really need this? it's not drawing in valve and buggy in imgui
 }
-static void test() {
-	Vector src3D, dst3D, forward;
-	Vector src, dst;
-	trace_t tr;
-	Ray_t ray;
-	CTraceFilter filter;
-	C_BasePlayer* localplayer = ( C_BasePlayer* ) entityList->GetClientEntity( engine->GetLocalPlayer() );
-	Math::AngleVectors( *localplayer->GetEyeAngles(), forward );
-	filter.pSkip = localplayer;
-	src3D = localplayer->GetEyePosition();
-	dst3D = src3D + ( forward * 8192 );
-
-	ray.Init( src3D, dst3D );
-
-	trace->TraceRay( ray, MASK_SHOT, &filter, &tr );
-	C_BaseCombatWeapon* activeWeapon = (C_BaseCombatWeapon*) entityList->GetClientEntityFromHandle(localplayer->GetActiveWeapon());
-	Aimbot::HitChance(dst3D, tr.m_pEntityHit, activeWeapon);
-
-}
 static void DrawAATrace( QAngle fake, QAngle actual ) {
 	C_BasePlayer* localPlayer = ( C_BasePlayer* ) entityList->GetClientEntity( engine->GetLocalPlayer() );
 	Vector src3D, dst3D, forward;
@@ -1830,7 +1811,7 @@ void ESP::Paint()
 		DrawSpread();
 	if (Settings::NoScopeBorder::enabled && localplayer->IsScoped())
 		DrawScope();
-	test();
+
 }
 
 void ESP::DrawModelExecute()

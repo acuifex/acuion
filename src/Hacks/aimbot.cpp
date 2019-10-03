@@ -136,12 +136,13 @@ static bool HeadMultiPoint(C_BasePlayer *player, Vector points[])
 	return true;
 }
 
-bool Aimbot::HitChance(Vector bestSpot, C_BaseEntity* player, C_BaseCombatWeapon* activeWeapon)
+bool HitChance(Vector bestSpot, C_BaseEntity* player, C_BaseCombatWeapon* activeWeapon)
 {
     C_BasePlayer* localplayer = (C_BasePlayer*) entityList->GetClientEntity(engine->GetLocalPlayer());
 
     Vector src = localplayer->GetEyePosition();
     QAngle angle = Math::CalcAngle(src, bestSpot);
+    Math::NormalizeAngles(angle);
 
 	Vector forward, right, up;
     Math::AngleVectors(angle, forward, right, up);
@@ -184,10 +185,7 @@ bool Aimbot::HitChance(Vector bestSpot, C_BaseEntity* player, C_BaseCombatWeapon
         ray.Init(src, viewForward);
         filter.pSkip = localplayer;
         trace->TraceRay(ray, MASK_SHOT, &filter, &tr);
-        Vector dst;
-        if (debugOverlay->ScreenPosition( viewForward, dst ))
-        	Draw::AddCircleFilled( dst.x, dst.y, Settings::ESP::HeadDot::size, ImColor(255, 0, 0, 255), 3 );
-		
+
         if (tr.m_pEntityHit == player)
             hitCount++;
 
@@ -782,8 +780,8 @@ static void AutoShoot(C_BasePlayer* player, Vector bestSpot, C_BaseCombatWeapon*
 		return;
 	if( Settings::Aimbot::SpreadLimit::enabled && ((activeWeapon->GetSpread() + activeWeapon->GetInaccuracy()) > Settings::Aimbot::SpreadLimit::value))
 		return;
-	// if( Settings::Aimbot::HitChance::enabled && !HitChance(bestSpot, player, activeWeapon) )
-	// 	return;
+	if( Settings::Aimbot::HitChance::enabled && !HitChance(bestSpot, player, activeWeapon) )
+	 	return;
 
 	float nextPrimaryAttack = activeWeapon->GetNextPrimaryAttack();
 

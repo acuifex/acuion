@@ -17,5 +17,4 @@ namespace Aimbot
 	void CreateMove(CUserCmd* cmd);
 	void FireGameEvent(IGameEvent* event);
 	void UpdateValues();
-	bool HitChance(Vector bestSpot, C_BaseEntity* player, C_BaseCombatWeapon* activeWeapon);
 }
