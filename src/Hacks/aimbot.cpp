@@ -8,8 +8,6 @@
 #include "../settings.h"
 #include "../interfaces.h"
 
-#include "../Utils/draw.h"
-
 
 // Default aimbot settings
 bool Settings::Aimbot::enabled = false;
