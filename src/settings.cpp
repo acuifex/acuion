@@ -256,6 +256,8 @@ void Settings::LoadDefaultsOrSave(std::string path)
 	settings[XORSTR("Triggerbot")][XORSTR("RandomDelay")][XORSTR("enabled")] = Settings::Triggerbot::RandomDelay::enabled;
 	settings[XORSTR("Triggerbot")][XORSTR("RandomDelay")][XORSTR("lowBound")] = Settings::Triggerbot::RandomDelay::lowBound;
 	settings[XORSTR("Triggerbot")][XORSTR("RandomDelay")][XORSTR("highBound")] = Settings::Triggerbot::RandomDelay::highBound;
+	settings[XORSTR("Triggerbot")][XORSTR("HitChance")][XORSTR("enabled")] = Settings::Triggerbot::HitChance::enabled;
+	settings[XORSTR("Triggerbot")][XORSTR("HitChance")][XORSTR("value")] = Settings::Triggerbot::HitChance::value;
 
 	settings[XORSTR("ESP")][XORSTR("enabled")] = Settings::ESP::enabled;
 	settings[XORSTR("ESP")][XORSTR("backend")] = (int)Settings::ESP::backend;
@@ -783,6 +785,8 @@ void Settings::LoadConfig(std::string path)
 	GetVal(settings[XORSTR("Triggerbot")][XORSTR("RandomDelay")][XORSTR("enabled")], &Settings::Triggerbot::RandomDelay::enabled);
 	GetVal(settings[XORSTR("Triggerbot")][XORSTR("RandomDelay")][XORSTR("lowBound")], &Settings::Triggerbot::RandomDelay::lowBound);
 	GetVal(settings[XORSTR("Triggerbot")][XORSTR("RandomDelay")][XORSTR("highBound")], &Settings::Triggerbot::RandomDelay::highBound);
+	GetVal(settings[XORSTR("Triggerbot")][XORSTR("HitChance")][XORSTR("enabled")], &Settings::Triggerbot::HitChance::enabled);
+	GetVal(settings[XORSTR("Triggerbot")][XORSTR("HitChance")][XORSTR("value")], &Settings::Triggerbot::HitChance::value);
 
 	GetVal(settings[XORSTR("ESP")][XORSTR("enabled")], &Settings::ESP::enabled);
 	GetVal(settings[XORSTR("ESP")][XORSTR("backend")], (int*)&Settings::ESP::backend);

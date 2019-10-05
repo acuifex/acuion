@@ -588,6 +588,12 @@ namespace Settings
 			extern int highBound;// in ms
 			extern int lastRoll;
 		}
+
+        namespace HitChance
+        {
+            extern bool enabled;
+            extern float value;
+        }
 	}
 
     namespace AntiAim

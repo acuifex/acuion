@@ -1,5 +1,6 @@
 #include "triggerbot.h"
 #include "autowall.h"
+#include "aimbot.h" // hitchance
 
 #include "../settings.h"
 #include "../interfaces.h"
@@ -21,6 +22,8 @@ bool Settings::Triggerbot::RandomDelay::enabled = true;
 int Settings::Triggerbot::RandomDelay::lowBound = 20;
 int Settings::Triggerbot::RandomDelay::highBound = 35;
 int Settings::Triggerbot::RandomDelay::lastRoll = 0;
+bool Settings::Triggerbot::HitChance::enabled = false;
+float Settings::Triggerbot::HitChance::value = 80.f;
 ButtonCode_t Settings::Triggerbot::key = ButtonCode_t::KEY_LALT;
 
 void Triggerbot::CreateMove(CUserCmd *cmd)
@@ -148,6 +151,9 @@ void Triggerbot::CreateMove(CUserCmd *cmd)
 	CSWeaponType weaponType = activeWeapon->GetCSWpnData()->GetWeaponType();
 	if (weaponType == CSWeaponType::WEAPONTYPE_C4 || weaponType == CSWeaponType::WEAPONTYPE_GRENADE)
 		return;
+
+	if (Settings::Triggerbot::HitChance::enabled && !Aimbot::HitChance(tr.endpos, player, activeWeapon, Settings::Triggerbot::HitChance::value))
+        return;
 
 	if (activeWeapon->GetNextPrimaryAttack() > globalVars->curtime)
 	{

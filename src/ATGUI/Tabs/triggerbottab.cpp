@@ -49,6 +49,18 @@ void Triggerbot::RenderTab()
 			}
 			ImGui::Columns(1);
 			ImGui::Separator();
+            ImGui::Text(XORSTR("Hit Chance"));
+            ImGui::Separator();
+			ImGui::Columns(2, nullptr, true);
+			{
+                ImGui::Checkbox(XORSTR("Enabled ###hcenabled"), &Settings::Triggerbot::HitChance::enabled);
+			}
+			ImGui::NextColumn();
+			{
+                ImGui::SliderFloat(XORSTR("##HitChance"), &Settings::Triggerbot::HitChance::value, 0, 100);
+			}
+			ImGui::Columns(1);
+			ImGui::Separator();
 
 			ImGui::Text(XORSTR("Auto Knife & Zeus"));
  			ImGui::Separator();

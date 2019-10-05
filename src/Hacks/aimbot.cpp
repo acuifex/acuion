@@ -134,7 +134,7 @@ static bool HeadMultiPoint(C_BasePlayer *player, Vector points[])
 	return true;
 }
 
-bool HitChance(Vector bestSpot, C_BaseEntity* player, C_BaseCombatWeapon* activeWeapon)
+bool Aimbot::HitChance(Vector bestSpot, C_BasePlayer* player, C_BaseCombatWeapon* activeWeapon, float hitChance)
 {
     C_BasePlayer* localplayer = (C_BasePlayer*) entityList->GetClientEntity(engine->GetLocalPlayer());
 
@@ -146,13 +146,13 @@ bool HitChance(Vector bestSpot, C_BaseEntity* player, C_BaseCombatWeapon* active
     Math::AngleVectors(angle, forward, right, up);
 
     int hitCount = 0;
-    int NeededHits = static_cast<int>(150.f * (Settings::Aimbot::HitChance::value / 100.f));
+    int NeededHits = static_cast<int>(255.f * (hitChance / 100.f));
 
     activeWeapon->UpdateAccuracyPenalty();
     float weap_spread = activeWeapon->GetSpread();
     float weap_inaccuracy = activeWeapon->GetInaccuracy();
 
-    for (int i = 0; i < 150; i++) {
+    for (int i = 0; i < 255; i++) {
     	RandomSeed(i + 1); // if we can't calculate spread like game does, then at least use same functions XD
         float b = RandomFloat(0.f, 2.f * (float)M_PI);
         float spread = weap_spread * RandomFloat(0.f, 1.0f);
@@ -185,10 +185,10 @@ bool HitChance(Vector bestSpot, C_BaseEntity* player, C_BaseCombatWeapon* active
         if (tr.m_pEntityHit == player)
             hitCount++;
 
-        if (static_cast<int>((static_cast<float>(hitCount) / 150.f) * 100.f) >= Settings::Aimbot::HitChance::value)
+        if (static_cast<int>((static_cast<float>(hitCount) / 255.f) * 100.f) >= hitChance)
 			return true;
 
-		if ((150 - i + hitCount) < NeededHits)
+		if ((255 - i + hitCount) < NeededHits)
 			return false;
     }
 
@@ -776,7 +776,7 @@ static void AutoShoot(C_BasePlayer* player, Vector bestSpot, C_BaseCombatWeapon*
 		return;
 	if( Settings::Aimbot::SpreadLimit::enabled && ((activeWeapon->GetSpread() + activeWeapon->GetInaccuracy()) > Settings::Aimbot::SpreadLimit::value))
 		return;
-	if( Settings::Aimbot::HitChance::enabled && !HitChance(bestSpot, player, activeWeapon) )
+	if( Settings::Aimbot::HitChance::enabled && !Aimbot::HitChance(bestSpot, player, activeWeapon, Settings::Aimbot::HitChance::value) )
 	 	return;
 
 	float nextPrimaryAttack = activeWeapon->GetNextPrimaryAttack();
