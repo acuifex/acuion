@@ -92,10 +92,14 @@ public:
 	virtual const Vector& OBBMaxs() const;
 };
 
+using CBaseHandle = unsigned long; // pfix no non existant class/struct
+
 class IHandleEntity
 {
 public:
 	virtual ~IHandleEntity() {};
+	virtual void SetRefEHandle( const CBaseHandle& handle ) = 0;
+	virtual const CBaseHandle& GetRefEHandle() const = 0;
 };
 
 class IClientUnknown : public IHandleEntity {};

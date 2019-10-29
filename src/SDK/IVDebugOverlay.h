@@ -11,6 +11,6 @@ public:
 	void DrawPill(const Vector& mins, const Vector& max, float& diameter, int r, int g, int b, int a, float duration)
 	{
 		typedef void(* OriginalFn)(void*, const Vector&, const Vector&, float&, int, int, int, int, float);
-		return getvfunc<OriginalFn>(this, 23)(this, mins, max, diameter, r, g, b, a, duration);
+		return getvfunc<OriginalFn>(this, 23)(this, mins, max, diameter, r, g, b, a, duration); // index 24?
 	}
 };

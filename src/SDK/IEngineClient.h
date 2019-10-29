@@ -1,5 +1,7 @@
 #pragma once
 
+class INetChannelInfo;
+
 class IEngineClient
 {
 public:
@@ -76,6 +78,12 @@ public:
 		typedef VMatrix& (* oWorldToScreenMatrix)( void* );
 		return getvfunc<oWorldToScreenMatrix>( this, 37 )( this );
 	}
+
+    INetChannelInfo* GetNetChannelInfo()
+    {
+        typedef INetChannelInfo*(* oGetNetChannelInfo)(void*);
+        return getvfunc<oGetNetChannelInfo>(this, 78)(this);
+    }
 
 	bool IsTakingScreenshot()
 	{

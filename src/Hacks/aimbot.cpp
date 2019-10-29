@@ -835,33 +835,33 @@ void Aimbot::CreateMove(CUserCmd* cmd)
 	float oldForward = cmd->forwardmove;
 	float oldSideMove = cmd->sidemove;
 
-	QAngle angle = cmd->viewangles;
-	static bool newTarget = true;
-	static QAngle lastRandom = {0,0,0};
-	Vector localEye = localplayer->GetEyePosition();
+    QAngle angle = cmd->viewangles;
+    static bool newTarget = true;
+    static QAngle lastRandom = {0,0,0};
+    Vector localEye = localplayer->GetEyePosition();
 
-	shouldAim = Settings::Aimbot::AutoShoot::enabled;
+    shouldAim = Settings::Aimbot::AutoShoot::enabled;
     Vector bestSpot = {0,0,0};
-	float bestDamage = 0.0f;
-	C_BasePlayer* player = GetClosestPlayerAndSpot(cmd, !Settings::Aimbot::AutoWall::enabled, &bestSpot, &bestDamage);
-	Aimbot::curtarget = player;
+    float bestDamage = 0.0f;
+    C_BasePlayer* player = GetClosestPlayerAndSpot(cmd, !Settings::Aimbot::AutoWall::enabled, &bestSpot, &bestDamage);
+    Aimbot::curtarget = player;
 
-	if (Settings::Aimbot::IgnoreJump::enabled && (!(localplayer->GetFlags() & FL_ONGROUND) && localplayer->GetMoveType() != MOVETYPE_LADDER))
-		return;
+    if (Settings::Aimbot::IgnoreJump::enabled && (!(localplayer->GetFlags() & FL_ONGROUND) && localplayer->GetMoveType() != MOVETYPE_LADDER))
+        return;
 
-	C_BaseCombatWeapon* activeWeapon = (C_BaseCombatWeapon*) entityList->GetClientEntityFromHandle(localplayer->GetActiveWeapon());
-	if (!activeWeapon || activeWeapon->GetInReload())
-		return;
+    C_BaseCombatWeapon* activeWeapon = (C_BaseCombatWeapon*) entityList->GetClientEntityFromHandle(localplayer->GetActiveWeapon());
+    if (!activeWeapon || activeWeapon->GetInReload())
+        return;
 
-	CSWeaponType weaponType = activeWeapon->GetCSWpnData()->GetWeaponType();
-	if (weaponType == CSWeaponType::WEAPONTYPE_C4 || weaponType == CSWeaponType::WEAPONTYPE_GRENADE || weaponType == CSWeaponType::WEAPONTYPE_KNIFE)
-		return;
+    CSWeaponType weaponType = activeWeapon->GetCSWpnData()->GetWeaponType();
+    if (weaponType == CSWeaponType::WEAPONTYPE_C4 || weaponType == CSWeaponType::WEAPONTYPE_GRENADE || weaponType == CSWeaponType::WEAPONTYPE_KNIFE)
+        return;
 
-	if (Settings::Aimbot::ScopeControl::enabled)
-	{
-		if (Util::Items::IsScopeable(*activeWeapon->GetItemDefinitionIndex()) && !localplayer->IsScoped())
-			return;
-	}
+    if (Settings::Aimbot::ScopeControl::enabled)
+    {
+        if (Util::Items::IsScopeable(*activeWeapon->GetItemDefinitionIndex()) && !localplayer->IsScoped())
+            return;
+    }
 
 	if (player)
 	{

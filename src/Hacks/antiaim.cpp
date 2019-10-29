@@ -593,7 +593,7 @@ void AntiAim::CreateMove(CUserCmd* cmd)
         angle.y += tempangle;
     	}
     	else
-    	DoAntiAimPreset(angle, bSend, animState);
+    	DoAntiAimPreset(angle, Settings::FakeLag::enabled ? CreateMove::sendPacket : bSend, animState);
     }
     else
     {

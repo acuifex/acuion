@@ -8,7 +8,6 @@
 bool Settings::LagComp::enabled = false;
 
 std::vector<LagComp::BacktrackTick> LagComp::ticks;
-CUserCmd* pubcmd;
 
 float GetLerpTime()
 {
@@ -34,36 +33,34 @@ float GetLerpTime()
     return std::max(lerp, (ratio / ud_rate));
 }
 
-bool IsTickValid( float time ) // pasted from polak getting some invalid ticks need some fix
+bool IsTickValid( float time ) // polak paste
 {
     float correct = 0;
 
-/*    correct += GetLocalClientFn->GetNetChannelInfo()->GetLatency( FLOW_OUTGOING ); // idk how to get these
-    correct += GetLocalClientFn->GetNetChannelInfo()->GetLatency( FLOW_INCOMING );*/
+/*    INetChannelInfo* nci = engine->GetNetChannelInfo();
+    if (!nci)
+        return false;
+    correct += nci->GetLatency( FLOW_OUTGOING );    // i get really bad results with this.
+    correct += nci->GetLatency( FLOW_INCOMING );*/ // i'ts like using 400 ms but without 400 ms
     correct += GetLerpTime();
-    
+
     correct = std::clamp( correct, 0.f, cvar->FindVar("sv_maxunlag")->GetFloat());
- 
+
     float deltaTime = correct - ( globalVars->curtime - time );
- 
-    if( fabsf( deltaTime ) < 0.2f )
-    {
-        return true;
-    }
- 
-    return false;
+
+    return fabsf(deltaTime) < 0.2f;
+
 }
 
 void RemoveBadRecords(std::vector<LagComp::BacktrackTick>& records)
 {
-    auto& m_LagRecords = records; // Should use rbegin but can't erase
-    for (auto lag_record = m_LagRecords.begin(); lag_record != m_LagRecords.end(); lag_record++)
+    for (auto lag_record = records.begin(); lag_record != records.end(); lag_record++)
     {
         if (!IsTickValid(lag_record->SimulationTime))
         {
-            m_LagRecords.erase(lag_record);
-            if (!m_LagRecords.empty())
-                lag_record = m_LagRecords.begin();
+            records.erase(lag_record);
+            if (!records.empty())
+                lag_record = records.begin();
             else break;
         }
     }
@@ -73,11 +70,6 @@ void RegisterTick()
 {
     LagComp::ticks.insert(LagComp::ticks.begin(), {globalVars->tickcount, globalVars->curtime});
     auto& cur = LagComp::ticks[0];
-
-    // while (LagComp::ticks.size() > 40) // i think i don't really need that
-    //     LagComp::ticks.pop_back();
- 
-    RemoveBadRecords(LagComp::ticks);
 
     for (int i = 1; i < engine->GetMaxClients(); ++i)
     {
@@ -102,21 +94,35 @@ void RegisterTick()
     }
 }
 
-void Begin(CUserCmd* cmd)
-{
+void LagComp::FrameStageNotify(ClientFrameStage_t stage){
+    if (!Settings::LagComp::enabled)
+        return;
+
+    if (stage == ClientFrameStage_t::FRAME_NET_UPDATE_POSTDATAUPDATE_START)
+    {
+        RegisterTick();
+    }
+}
+
+void LagComp::CreateMove(CUserCmd* cmd){
+    if (!Settings::LagComp::enabled)
+        return;
+
+    RemoveBadRecords(LagComp::ticks);
 
     C_BasePlayer* localplayer = (C_BasePlayer*) entityList->GetClientEntity(engine->GetLocalPlayer());
     if (!localplayer || !localplayer->GetAlive())
         return;
 
-    float serverTime = localplayer->GetTickBase() * globalVars->interval_per_tick;
     C_BaseCombatWeapon* weapon = (C_BaseCombatWeapon*) entityList->GetClientEntityFromHandle(localplayer->GetActiveWeapon());
+    if (!weapon)
+        return;
 
     QAngle myAngle;
     engine->GetViewAngles(myAngle);
     QAngle myAngle_rcs = myAngle + *localplayer->GetAimPunchAngle();
 
-    if (cmd->buttons & IN_ATTACK && weapon->GetNextPrimaryAttack() <= serverTime)
+    if (cmd->buttons & IN_ATTACK && weapon->GetNextPrimaryAttack() <= globalVars->curtime)
     {
         float fov = 7.f;
         int tickcount = 0;
@@ -143,20 +149,4 @@ void Begin(CUserCmd* cmd)
             cmd->tick_count = tickcount;
         }
     }
-}
-
-void LagComp::FrameStageNotify(ClientFrameStage_t stage){
-    if (!Settings::LagComp::enabled)
-        return;
-
-    if (stage == ClientFrameStage_t::FRAME_NET_UPDATE_POSTDATAUPDATE_START)
-    {
-        RegisterTick();
-    }
-}
-
-void LagComp::CreateMove(CUserCmd* cmd){
-    if (!Settings::LagComp::enabled)
-        return;
-    Begin(cmd);
 }
