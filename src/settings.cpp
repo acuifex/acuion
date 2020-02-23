@@ -210,7 +210,7 @@ void Settings::LoadDefaultsOrSave(std::string path)
 		weaponSetting[XORSTR("Prediction")][XORSTR("enabled")] = i.second.predEnabled;
 		weaponSetting[XORSTR("ScopeControl")][XORSTR("Enabled")] = i.second.scopeControlEnabled;
 
-		for (int bone = (int) DesiredBones::BONE_PELVIS; bone <= (int) DesiredBones::BONE_RIGHT_SOLE; bone++)
+		for (int bone = BONE_PELVIS; bone <= BONE_RIGHT_SOLE; bone++)
 			weaponSetting[XORSTR("DesiredBones")][XORSTR("Bones")][bone] = i.second.desiredBones[bone];
 
 		weaponSetting[XORSTR("AutoAim")][XORSTR("RealDistance")] = i.second.autoAimRealDistance;
@@ -726,7 +726,7 @@ void Settings::LoadConfig(std::string path)
 				.scopeControlEnabled = weaponSetting[XORSTR( "ScopeControl" )][XORSTR( "Enabled" )].asBool(),
 
 				.engageLockTTR = weaponSetting[XORSTR( "engageLockTTR" )].asInt(),
-				.bone = (Bone) weaponSetting[XORSTR( "TargetBone" )].asInt(),
+				.bone = weaponSetting[XORSTR( "TargetBone" )].asInt(),
 				.smoothType = (SmoothType) weaponSetting[XORSTR( "Smooth" )][XORSTR( "Type" )].asInt(),
 				.aimkey = Util::GetButtonCode(weaponSetting[XORSTR( "AimKey" )].asCString()),
 				.smoothAmount = weaponSetting[XORSTR( "Smooth" )][XORSTR( "Amount" )].asFloat(),
@@ -742,7 +742,7 @@ void Settings::LoadConfig(std::string path)
 				.hitChance = weaponSetting[XORSTR( "HitChance" )][XORSTR( "Value" )].asFloat(),
 		};
 
-		for (int bone = (int) DesiredBones::BONE_PELVIS; bone <= (int) DesiredBones::BONE_RIGHT_SOLE; bone++)
+		for (int bone = BONE_PELVIS; bone <= BONE_RIGHT_SOLE; bone++)
 			weapon.desiredBones[bone] = weaponSetting[XORSTR("DesiredBones")][XORSTR("Bones")][bone].asBool();
 		Settings::Aimbot::weapons.at(weaponID) = weapon;
 	}
