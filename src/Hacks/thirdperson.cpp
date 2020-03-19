@@ -9,6 +9,7 @@ float Settings::ThirdPerson::distance = 30.f;
 
 ShowedAngle Settings::ThirdPerson::type = ShowedAngle::REAL;
 ButtonCode_t Settings::ThirdPerson::key = ButtonCode_t::KEY_V;
+QAngle fakeang= {0.0f, 0.0f, 0.0f}, realang = {0.0f, 0.0f, 0.0f};
 
 void ThirdPerson::OverrideView(CViewSetup *pSetup)
 {
@@ -70,12 +71,20 @@ void ThirdPerson::FrameStageNotify(ClientFrameStage_t stage)
             switch (Settings::ThirdPerson::type)
             {
                 case ShowedAngle::REAL:
-                    *localplayer->GetVAngles() = AntiAim::realAngle;
+                    *localplayer->GetVAngles() = realang;
                     break;
                 case ShowedAngle::FAKE:
-                    *localplayer->GetVAngles() = AntiAim::fakeAngle;
+                    *localplayer->GetVAngles() = fakeang;
                     break;
             }
 		}
 	}
+}
+
+void ThirdPerson::CreateMove(CUserCmd* cmd) // get angles
+{
+    if(CreateMove::sendPacket)
+        realang = cmd->viewangles;
+    else
+        fakeang = cmd->viewangles;
 }

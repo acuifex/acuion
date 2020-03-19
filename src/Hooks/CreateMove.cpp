@@ -23,6 +23,7 @@
 #include "../Hacks/fakelag.h"
 #include "../Hacks/esp.h"
 #include "../Hacks/tracereffect.h"
+#include "../Hacks/thirdperson.h"
 #include "../Hacks/nofall.h"
 
 bool CreateMove::sendPacket = true;
@@ -65,6 +66,7 @@ bool Hooks::CreateMove(void* thisptr, float flInputSampleTime, CUserCmd* cmd)
 			AntiAim::CreateMove(cmd);
 			ESP::CreateMove(cmd);
 			TracerEffect::CreateMove(cmd);
+            ThirdPerson::CreateMove(cmd);
 		PredictionSystem::EndPrediction();
 
 		EdgeJump::PostPredictionCreateMove(cmd);

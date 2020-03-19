@@ -132,6 +132,9 @@ void Hooks::PaintImGui()
             case DRAW_TEXT:
                 Draw::ImText( ImVec2( x0, y0 ), value.color, value.text, nullptr, 0.0f, nullptr, value.fontflags );
                 break;
+            default:
+                cvar->ConsoleColorPrintf(ColorRGBA(0, 225, 0), "\nERROR: UNKNOWN PaintImGui CALL (%X)\n", value.type);
+                break;
         }
     }
 }
