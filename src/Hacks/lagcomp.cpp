@@ -6,8 +6,6 @@
 #include "../Utils/bonemaps.h"
 #include <algorithm>
 
-bool Settings::LagComp::enabled = false;
-
 std::vector<LagComp::BacktrackTick> LagComp::ticks;
 CUserCmd* pubcmd;
 

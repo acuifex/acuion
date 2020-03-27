@@ -4,11 +4,6 @@
 #include "../settings.h"
 #include "../interfaces.h"
 
-bool Settings::ThirdPerson::enabled = false;
-float Settings::ThirdPerson::distance = 30.f;
-
-ShowedAngle Settings::ThirdPerson::type = ShowedAngle::REAL;
-ButtonCode_t Settings::ThirdPerson::key = ButtonCode_t::KEY_V;
 QAngle fakeang= {0.0f, 0.0f, 0.0f}, realang = {0.0f, 0.0f, 0.0f};
 
 void ThirdPerson::OverrideView(CViewSetup *pSetup)

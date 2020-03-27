@@ -9,25 +9,6 @@
 #include "valvedscheck.h"
 #include "../Utils/xorstring.h"
 
-bool Settings::AntiAim::Yaw::enabled = false;
-float Settings::AntiAim::Yaw::offset = 0.0f;
-bool Settings::AntiAim::Fake::enabled = false;
-bool Settings::AntiAim::RageDesyncFix::enabled = false;
-bool Settings::AntiAim::Pitch::enabled = false;
-
-AntiAimYaw_Preset Settings::AntiAim::Preset::type = AntiAimYaw_Preset::DIY;
-AntiAimYaw_Real Settings::AntiAim::Yaw::type = AntiAimYaw_Real::BACKWARDS;
-AntiAimYaw_Fake Settings::AntiAim::Fake::type = AntiAimYaw_Fake::JITTER;
-AntiAimType_X Settings::AntiAim::Pitch::type = AntiAimType_X::STATIC_DOWN;
-
-bool Settings::AntiAim::HeadEdge::enabled = false;
-
-bool Settings::AntiAim::AutoDisable::noEnemy = false;
-bool Settings::AntiAim::AutoDisable::knifeHeld = false;
-bool Settings::AntiAim::LBYBreaker::enabled = false;
-float Settings::AntiAim::LBYBreaker::offset = 180.0f;
-bool Settings::AntiAim::LBYBreaker::manual = false;
-
 QAngle AntiAim::realAngle;
 QAngle AntiAim::fakeAngle;
 static bool manualswitch = true;

@@ -4,11 +4,7 @@
 #include "../interfaces.h"
 #include "../Hooks/hooks.h"
 
-bool Settings::FakeLag::enabled = false;
-int Settings::FakeLag::value = 9;
-bool Settings::FakeLag::adaptive = false;
-
-bool FakeLag::lagSpike = false;
+bool FakeLag::lagSpike = false; // TODO: this also looks kinda ghetto
 
 static int ticks = 0;
 int ticksMax = 16;
