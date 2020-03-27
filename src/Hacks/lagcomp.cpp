@@ -109,10 +109,12 @@ void Begin(CUserCmd* cmd)
     C_BasePlayer* localplayer = (C_BasePlayer*) entityList->GetClientEntity(engine->GetLocalPlayer());
     if (!localplayer || !localplayer->GetAlive())
         return;
+    
+    C_BaseCombatWeapon* weapon = (C_BaseCombatWeapon*) entityList->GetClientEntityFromHandle(localplayer->GetActiveWeapon());
+    if (!weapon)
+        return;
 
     float serverTime = localplayer->GetTickBase() * globalVars->interval_per_tick;
-    C_BaseCombatWeapon* weapon = (C_BaseCombatWeapon*) entityList->GetClientEntityFromHandle(localplayer->GetActiveWeapon());
-
     QAngle myAngle;
     engine->GetViewAngles(myAngle);
     QAngle myAngle_rcs = myAngle + *localplayer->GetAimPunchAngle();

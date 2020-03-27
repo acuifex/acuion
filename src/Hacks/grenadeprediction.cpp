@@ -141,7 +141,11 @@ static bool CheckDetonate( const Vector& vecThrow, const trace_t& tr, int tick, 
             // Pure timer based, detonate at 1.5s, checked every 0.2s
             return static_cast<float>(tick) * interval > 1.5f && !( tick % static_cast<int>(0.2f / interval) );
         default:
-            assert( false );
+//            assert( false );
+            if ( vecThrow.Length2D() < 0.1f ) { // TODO: GHETTO ALERT!!!
+                int det_tick_mod = static_cast<int>(0.2f / interval);
+                return !( tick % det_tick_mod );
+            }
             return false;
     }
 }
