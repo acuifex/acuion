@@ -91,27 +91,37 @@ void Visuals::RenderTab()
 		{
 			ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(Settings::UI::mainColor.Color().Value.x, Settings::UI::mainColor.Color().Value.y, Settings::UI::mainColor.Color().Value.z, Settings::UI::mainColor.Color().Value.w));
 
-			if (current_category == Category::ESP)
-				ImGui::PopStyleColor();
-			if (ImGui::Button("ESP", ImVec2(w, w)))
-				current_category = Category::ESP;
-			if (current_category == Category::ESP)
-				ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(Settings::UI::mainColor.Color().Value.x, Settings::UI::mainColor.Color().Value.y, Settings::UI::mainColor.Color().Value.z, Settings::UI::mainColor.Color().Value.w));
-
-			if (current_category == Category::LOCAL)
-				ImGui::PopStyleColor();
-			if (ImGui::Button("Local", ImVec2(w, w)))
-				current_category = Category::LOCAL;
-			if (current_category == Category::LOCAL)
-				ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(Settings::UI::mainColor.Color().Value.x, Settings::UI::mainColor.Color().Value.y, Settings::UI::mainColor.Color().Value.z, Settings::UI::mainColor.Color().Value.w));
-
-			if (current_category == Category::WORLD)
-				ImGui::PopStyleColor();
-			if (ImGui::Button("World", ImVec2(w, w)))
-				current_category = Category::WORLD;
-			if (current_category == Category::WORLD)
-				ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(Settings::UI::mainColor.Color().Value.x, Settings::UI::mainColor.Color().Value.y, Settings::UI::mainColor.Color().Value.z, Settings::UI::mainColor.Color().Value.w));
-
+            if (ImGui::Button("ESP", ImVec2(w, w)))
+                current_category = Category::ESP;
+            if (ImGui::Button("Local", ImVec2(w, w)))
+                current_category = Category::LOCAL;
+            if (ImGui::Button("World", ImVec2(w, w)))
+                current_category = Category::WORLD;
+            switch(current_category) { // todo: wtf is even that? my ide says "switch has 3 consecutive identical branches"
+                                        // and when ide says that then you're really fucking up
+                                        // anyway, i fixed the crash.
+                case Category::ESP:
+                    ImGui::PopStyleColor();
+                    ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(Settings::UI::mainColor.Color().Value.x,
+                                                                  Settings::UI::mainColor.Color().Value.y,
+                                                                  Settings::UI::mainColor.Color().Value.z,
+                                                                  Settings::UI::mainColor.Color().Value.w));
+                    break;
+                case Category::LOCAL:
+                    ImGui::PopStyleColor();
+                    ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(Settings::UI::mainColor.Color().Value.x,
+                                                                  Settings::UI::mainColor.Color().Value.y,
+                                                                  Settings::UI::mainColor.Color().Value.z,
+                                                                  Settings::UI::mainColor.Color().Value.w));
+                    break;
+                case Category::WORLD:
+                    ImGui::PopStyleColor();
+                    ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(Settings::UI::mainColor.Color().Value.x,
+                                                                  Settings::UI::mainColor.Color().Value.y,
+                                                                  Settings::UI::mainColor.Color().Value.z,
+                                                                  Settings::UI::mainColor.Color().Value.w));
+                    break;
+            }
 			ImGui::PopStyleColor();
 		}
 		ImGui::EndChild();
@@ -143,6 +153,7 @@ void Visuals::RenderTab()
 					ImGui::Text(XORSTR("Team Color"));
 					ImGui::ItemSize(ImVec2(0.0f, 0.0f), 0.0f);
 					ImGui::Checkbox(XORSTR("Head Dot"), &Settings::ESP::HeadDot::enabled);
+                    ImGui::Checkbox(XORSTR("backtrack"), &Settings::ESP::backtrack::enabled);
 					ImGui::Checkbox(XORSTR("Tracers"), &Settings::ESP::Tracers::enabled);
 					ImGui::Checkbox(XORSTR("Dlights"), &Settings::Dlights::enabled);
 					ImGui::Checkbox(XORSTR("Skeleton"), &Settings::ESP::Skeleton::enabled);
