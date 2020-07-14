@@ -236,7 +236,7 @@ struct AimbotWeapon_t
 		 predEnabled,
 		 scopeControlEnabled;
 	int engageLockTTR = 700;
-	Bone bone = BONE_HEAD;
+	Bone bone = CONST_BONE_HEAD;
 	SmoothType smoothType = SmoothType::SLOW_END;
 	ButtonCode_t aimkey = ButtonCode_t ::MOUSE_MIDDLE;
 	float smoothAmount = 1.0f,
@@ -360,6 +360,8 @@ namespace Settings
 		inline ColorVar bodyColor = ImColor( 5, 5, 5, 255 );
 		inline ColorVar fontColor = ImColor( 255, 255, 255, 255 );
 		inline ColorVar accentColor = ImColor( 39, 106, 219, 255 );
+		inline bool imGuiAliasedLines = false;
+		inline bool imGuiAliasedFill = false;
 
         /* Window Position/Size Defaults */
         namespace Windows
@@ -434,7 +436,7 @@ namespace Settings
 		inline bool enabled = false;
         inline bool silent = false;
         inline bool friendly = false;
-        inline Bone bone = BONE_HEAD;
+        inline Bone bone = CONST_BONE_HEAD;
         inline ButtonCode_t aimkey = ButtonCode_t::MOUSE_MIDDLE;
         inline bool aimkeyOnly = false;
 
