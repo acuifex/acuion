@@ -112,8 +112,8 @@ bool Aimbot::HitChance(Vector bestSpot, C_BasePlayer* player, C_BaseCombatWeapon
 		Math::NormalizeAngles(viewAnglesSpread);
 
 		Vector viewForward;
-		Math::AngleVectors(viewAnglesSpread, viewForward);
-		viewForward.NormalizeInPlace();
+        Math::AngleVectors(viewAnglesSpread, viewForward);
+		viewForward.Normalize(); // NormalizeInPlace gives me crash for some reason, and Normalize is the same thing as far as i know.
 
 		viewForward = src + (viewForward * activeWeapon->GetCSWpnData()->GetRange());
 

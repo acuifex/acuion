@@ -133,8 +133,9 @@ void Triggerbot::CreateMove(CUserCmd *cmd)
 	if (weaponType == CSWeaponType::WEAPONTYPE_C4 || weaponType == CSWeaponType::WEAPONTYPE_GRENADE)
 		return;
 
-	if (Settings::Triggerbot::HitChance::enabled && !Aimbot::HitChance(tr.endpos, player, activeWeapon, Settings::Triggerbot::HitChance::value))
-        return;
+	if (Settings::Triggerbot::HitChance::enabled)
+        if (!Aimbot::HitChance(tr.endpos, player, activeWeapon, Settings::Triggerbot::HitChance::value))
+            return;
 
 	if (activeWeapon->GetNextPrimaryAttack() > globalVars->curtime)
 	{

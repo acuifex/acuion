@@ -177,7 +177,7 @@ void Math::VectorAngles(const Vector& forward, QAngle &angles)
 void Math::VectorAngles(const Vector& forward, Vector& up, QAngle& angles)
 {
     Vector left = CrossProduct(up, forward);
-    left.NormalizeInPlace();
+    left.Normalize(); // NormalizeInPlace gives me crash for some reason, and Normalize is the same thing as far as i know.
 
     float forwardDist = forward.Length2D();
 
