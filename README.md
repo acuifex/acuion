@@ -1,3 +1,21 @@
+# acuion / acuifex fork
+Here are some of my configs that i use: </br>
+https://github.com/acuifex/acuion-personal-configs 
+### What have been done (that i remember):
+* Hitchance for aimbot and triggerbot
+* Backtrack that doesn't work with aimbot and triggerbot
+* Visual dots for backtrack
+* Dirrection control for AA and LBY (left arrow and right arrow key)
+* Jitter preset for AA that i pasted from somewhere
+* AA yaw offset
+* Binding for thirdperson
+* "desync fail fix" some garbage. i recomend not using because only god knows what it does
+* Fixed some garbage crashes that i had
+* Added old aimtux AA's
+* Some yaw indicators in third person
+* AA yaw follow setting.
+
+# Original fuzion readme
 <p align="center">
 <img src="http://i.imgur.com/mCtrbIN.png">
 </p>
