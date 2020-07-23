@@ -977,6 +977,7 @@ namespace Settings
 	namespace LagComp
 	{
         inline bool enabled = false;
+        inline float window = 200.0f;
 	}
 
 	namespace AutoStrafe

@@ -153,11 +153,11 @@ void Visuals::RenderTab()
 					ImGui::Text(XORSTR("Team Color"));
 					ImGui::ItemSize(ImVec2(0.0f, 0.0f), 0.0f);
 					ImGui::Checkbox(XORSTR("Head Dot"), &Settings::ESP::HeadDot::enabled);
-                    ImGui::Checkbox(XORSTR("backtrack"), &Settings::ESP::backtrack::enabled);
 					ImGui::Checkbox(XORSTR("Tracers"), &Settings::ESP::Tracers::enabled);
-					ImGui::Checkbox(XORSTR("Dlights"), &Settings::Dlights::enabled);
-					ImGui::Checkbox(XORSTR("Skeleton"), &Settings::ESP::Skeleton::enabled);
-				}
+                    ImGui::Checkbox(XORSTR("Dlights"), &Settings::Dlights::enabled);
+                    ImGui::Checkbox(XORSTR("Skeleton"), &Settings::ESP::Skeleton::enabled);
+                    ImGui::Checkbox(XORSTR("backtrack"), &Settings::ESP::backtrack::enabled);
+                }
 				ImGui::NextColumn();
 				{
 					ImGui::Combo(XORSTR("##BOXTYPE"), (int*)& Settings::ESP::Boxes::type, BoxTypes, IM_ARRAYSIZE(BoxTypes));

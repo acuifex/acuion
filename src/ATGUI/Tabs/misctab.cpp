@@ -436,9 +436,9 @@ void Misc::RenderTab()
 				ImGui::Checkbox(XORSTR("Jump Throw"), &Settings::JumpThrow::enabled);
 				ImGui::Checkbox(XORSTR("Auto Defuse"), &Settings::AutoDefuse::enabled);
 				ImGui::Checkbox(XORSTR("Sniper Crosshair"), &Settings::SniperCrosshair::enabled);
-				ImGui::Checkbox(XORSTR("Disable post-processing"), &Settings::DisablePostProcessing::enabled);
-				ImGui::Checkbox(XORSTR("No Duck Cooldown"), &Settings::NoDuckCooldown::enabled);
-				ImGui::Checkbox(XORSTR("BackTrack"), &Settings::LagComp::enabled);
+                ImGui::Checkbox(XORSTR("BackTrack"), &Settings::LagComp::enabled);
+                ImGui::Checkbox(XORSTR("Disable post-processing"), &Settings::DisablePostProcessing::enabled);
+                ImGui::Checkbox(XORSTR("No Duck Cooldown"), &Settings::NoDuckCooldown::enabled);
 			}
 			ImGui::NextColumn();
 			{
@@ -452,6 +452,7 @@ void Misc::RenderTab()
 				UI::KeyBindButton(&Settings::JumpThrow::key);
 				ImGui::Checkbox(XORSTR("Silent Defuse"), &Settings::AutoDefuse::silent);
 				ImGui::Checkbox(XORSTR("Attempt NoFall"), &Settings::NoFall::enabled);
+                ImGui::SliderFloat(XORSTR("##BTWINDOW"), &Settings::LagComp::window, 0.f, 200.f, XORSTR("ms: %0.f"));
 			}
 			ImGui::Columns(1);
 			ImGui::Separator();

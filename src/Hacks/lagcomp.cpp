@@ -45,7 +45,7 @@ bool IsTickValid( float time ) // pasted from polak getting some invalid ticks n
  
     float deltaTime = correct - ( globalVars->curtime - time );
  
-    if( fabsf( deltaTime ) < 0.2f )
+    if( fabsf( deltaTime ) < Settings::LagComp::window / 1000 )
     {
         return true;
     }
