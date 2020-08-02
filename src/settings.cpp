@@ -225,6 +225,8 @@ void Settings::LoadDefaultsOrSave(std::string path)
 	settings[XORSTR("AntiAim")][XORSTR("AutoDisable")][XORSTR("knife_held")] = Settings::AntiAim::AutoDisable::knifeHeld;
 	settings[XORSTR("AntiAim")][XORSTR("Preset")][XORSTR("type")] = (int) Settings::AntiAim::Preset::type;
 	settings[XORSTR("AntiAim")][XORSTR("Yaw")][XORSTR("enabled")] = Settings::AntiAim::Yaw::enabled;
+	settings[XORSTR("AntiAim")][XORSTR("Yaw")][XORSTR("addDesyncEnabled")] = Settings::AntiAim::Yaw::addDesyncEnabled;
+	settings[XORSTR("AntiAim")][XORSTR("Yaw")][XORSTR("addDesyncoffset")] = Settings::AntiAim::Yaw::addDesyncOffset;
 	settings[XORSTR("AntiAim")][XORSTR("Yaw")][XORSTR("type")] = (int) Settings::AntiAim::Yaw::type;
 	settings[XORSTR("AntiAim")][XORSTR("Yaw")][XORSTR("offset")] = Settings::AntiAim::Yaw::offset;
 	settings[XORSTR("AntiAim")][XORSTR("Fake")][XORSTR("enabled")] = Settings::AntiAim::Fake::enabled;
@@ -624,6 +626,7 @@ void Settings::LoadDefaultsOrSave(std::string path)
 	settings[XORSTR("JumpThrow")][XORSTR("key")] = Util::GetButtonName(Settings::JumpThrow::key);
 
 	settings[XORSTR("DisablePostProcessing")][XORSTR("enabled")] = Settings::DisablePostProcessing::enabled;
+	settings[XORSTR("Skateboarding")][XORSTR("enabled")] = Settings::Skateboarding::enabled;
 	settings[XORSTR("NoFall")][XORSTR("enabled")] = Settings::NoFall::enabled;
 
 	settings[XORSTR("GrenadeHelper")][XORSTR("enabled")] = Settings::GrenadeHelper::enabled;

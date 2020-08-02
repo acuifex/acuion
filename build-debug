@@ -5,4 +5,33 @@ then
 fi 
 cmake -DCMAKE_BUILD_TYPE="DEBUG"
 make -j"$(grep -c "^processor" /proc/cpuinfo)"
-mv libFuzion.so "$(cat build_id)"
+
+rm build_id_hex
+# Get a Random name from the build_names file.
+BUILD_ID=$(shuf -n 1 build_names)
+
+# In case this file exists, get another one. ( checked it works )
+while [ -f "/usr/lib/${BUILD_ID}" ] || grep -q ${BUILD_ID} /proc/$(pidof csgo_linux64)/maps; do
+	BUILD_ID=$(shuf -n 1 build_names)
+done
+
+# Hexify it and put it into build_id_hex
+for (( i=0; i<${#BUILD_ID}; i++ )); do
+  printf '0x%x,\n' "'${BUILD_ID:$i:1}" >> build_id_hex
+done
+printf '0x0' >> build_id_hex
+
+if [ -f build_id ]; then
+    filename=$(cat build_id)
+    rm "$filename"
+    if [ -f "/usr/lib/${filename}" ]; then
+    	echo -e "Note: Old file found at /usr/lib/${filename}\n"
+        #sudo rm "/usr/lib/${filename}"
+
+    fi
+    chmod 660 build_id
+    mv build_id build_id_old
+fi
+
+echo $BUILD_ID > build_id
+mv libFuzion.so "$BUILD_ID"

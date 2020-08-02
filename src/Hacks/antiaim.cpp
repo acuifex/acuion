@@ -246,7 +246,7 @@ static void DoAntiAimY(QAngle& angle, bool& clamp, CCSGOAnimState* animState)
 	QAngle followangle;
 	int random;
 	int maxJitter;
-	Vector test = {0,0,0};
+	Vector test;
 	C_BasePlayer* tmp;
 
 	switch (aa_type)
@@ -305,20 +305,14 @@ static void DoAntiAimY(QAngle& angle, bool& clamp, CCSGOAnimState* animState)
 			if (trigger > 100.0f)
 				trigger = 0.0f;
 			break;
-		case AntiAimYaw_Real::FOLLOW:	
-			tmp = GetClosestPlayer();
-			temp = manualswitch ? -maxDelta : maxDelta;
+		case AntiAimYaw_Real::FOLLOW:
 			if(Aimbot::curtarget)
 				test = Aimbot::curtarget->GetVecOrigin();
-			else if(tmp)
+			else if(tmp = GetClosestPlayer(); tmp)
 				test = tmp->GetVecOrigin();
-			else
-			{
-				angle.y += temp; // temporarly. later i will do some better thing
-				break;
-			}
-			followangle = Math::CalcAngle(((C_BasePlayer*)entityList->GetClientEntity(engine->GetLocalPlayer()))->GetEyePosition(), test);
-			angle.y = followangle.y + temp;
+			if (test != Vector(0, 0, 0))
+				angle.y = Math::CalcAngle(((C_BasePlayer*)entityList->GetClientEntity(engine->GetLocalPlayer()))->GetEyePosition(), test).y;
+			// angle.y = followangle.y;
 			break;
 		case AntiAimYaw_Real::LISP:
 			clamp = false;
@@ -397,6 +391,9 @@ static void DoAntiAimY(QAngle& angle, bool& clamp, CCSGOAnimState* animState)
 			angle.y -= 0.0f;
 			break;
 	}
+	angle.y += Settings::AntiAim::Yaw::offset;
+	if (Settings::AntiAim::Yaw::addDesyncEnabled)
+		angle.y += (manualswitch ? maxDelta : -maxDelta) * (Settings::AntiAim::Yaw::addDesyncOffset / 100);
 }
 
 static void DoAntiAimX(QAngle& angle, bool bFlip, bool& clamp)
@@ -570,18 +567,17 @@ void AntiAim::CreateMove(CUserCmd* cmd)
         	CreateMove::sendPacket = false;
 
         if (needToFlick){
-        CreateMove::sendPacket = false;
-        angle.y += tempangle;
+	        CreateMove::sendPacket = false;
+	        angle.y += tempangle;
     	}
     	else
-    	DoAntiAimPreset(angle, bSend, animState);
+			DoAntiAimPreset(angle, bSend, animState);
     }
     else
     {
     if (Settings::AntiAim::Yaw::enabled)
     {
         DoAntiAimY(angle, should_clamp, animState);
-        angle.y += Settings::AntiAim::Yaw::offset;
 
         if ((nextUpdate - globalVars->interval_per_tick) >= globalVars->curtime && nextUpdate <= globalVars->curtime)
         	CreateMove::sendPacket = false;

@@ -621,8 +621,10 @@ namespace Settings
         namespace Yaw
         {
             inline bool enabled = false;
-            inline AntiAimYaw_Real type = AntiAimYaw_Real::BACKWARDS;
-            inline float offset = 0.f;
+            inline bool addDesyncEnabled = false;
+	        inline float addDesyncOffset = 0.f;
+	        inline AntiAimYaw_Real type = AntiAimYaw_Real::BACKWARDS;
+	        inline float offset = 0.f;
         }
 
 		namespace Fake
@@ -1244,6 +1246,11 @@ namespace Settings
 	}
 
 	namespace DisablePostProcessing
+	{
+		inline bool enabled = false;
+	}
+	
+	namespace Skateboarding
 	{
 		inline bool enabled = false;
 	}

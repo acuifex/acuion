@@ -73,9 +73,28 @@ void HvH::RenderTab()
 						ImGui::PopItemWidth();
 					}
 					ImGui::Columns(1);
+					ImGui::PushItemWidth(-1);
 					ImGui::SliderFloat(XORSTR("##REALOFFSET"), &Settings::AntiAim::Yaw::offset, 0, 360, "Yaw Offset: %0.f");
+					ImGui::PopItemWidth();
 					ImGui::Columns(1);
+					ImGui::Checkbox(XORSTR("Yaw"), &Settings::AntiAim::Yaw::enabled);
 					ImGui::Separator();
+					ImGui::Columns(2, NULL, true);
+					{
+						ImGui::ItemSize(ImVec2(0.0f, 0.0f), 0.0f);
+						ImGui::Checkbox(XORSTR("add desync to yaw"), &Settings::AntiAim::Yaw::addDesyncEnabled);
+						
+					}
+					ImGui::NextColumn();
+					{
+						ImGui::PushItemWidth(-1);
+						
+						ImGui::SliderFloat(XORSTR("##LBYOFFSET"), &Settings::AntiAim::Yaw::addDesyncOffset, -100, 100, "%0.f%%");
+						
+						ImGui::PopItemWidth();
+					}
+					ImGui::Separator();
+					ImGui::Columns(1);
 					ImGui::Checkbox(XORSTR("Pitch"), &Settings::AntiAim::Pitch::enabled);
 					ImGui::Separator();
 					ImGui::Columns(2, NULL, true);

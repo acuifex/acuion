@@ -13,7 +13,9 @@ https://github.com/acuifex/acuion-personal-configs
 * Fixed some garbage crashes that i had
 * Added old aimtux AA's
 * Some yaw indicators in third person
-* AA yaw follow setting.
+* AA yaw follow setting
+* Offset yaw by desync value in percents
+* Skateboarding!
 
 # Original fuzion readme
 <p align="center">

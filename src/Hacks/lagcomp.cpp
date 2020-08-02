@@ -44,13 +44,9 @@ bool IsTickValid( float time ) // pasted from polak getting some invalid ticks n
     correct = std::clamp( correct, 0.f, cvar->FindVar("sv_maxunlag")->GetFloat());
  
     float deltaTime = correct - ( globalVars->curtime - time );
- 
-    if( fabsf( deltaTime ) < Settings::LagComp::window / 1000 )
-    {
-        return true;
-    }
- 
-    return false;
+	
+	return fabsf(deltaTime) < Settings::LagComp::window / 1000;
+	
 }
 
 void RemoveBadRecords(std::vector<LagComp::BacktrackTick>& records)
