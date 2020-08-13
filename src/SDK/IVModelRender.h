@@ -3,6 +3,7 @@
 #include "IMaterial.h"
 #include "common.h"
 #include "definitions.h"
+#include "IClientEntity.h"
 
 typedef unsigned short ModelInstanceHandle_t;
 
@@ -16,7 +17,7 @@ struct ModelRenderInfo_t
 	Vector origin;
 	QAngle angles;
 	char _padding[0x4];
-	void *pRenderable;
+	IClientRenderable *pRenderable;
 	const model_t *pModel;
 	const matrix3x4_t* pModelToWorld;
 	const matrix3x4_t* pLightingOffset;

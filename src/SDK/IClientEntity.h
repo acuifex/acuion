@@ -15,6 +15,7 @@
 
 class model_t;
 class ClientClass;
+class CBaseHandle;
 
 typedef int (* GetSequenceActivityFn)( void*, int ); // C_BaseAnimating::GetSequenceActivity(int sequence).
 extern GetSequenceActivityFn GetSeqActivity;
@@ -185,6 +186,12 @@ public:
 		typedef const Vector& (* oGetAbsOrigin)(void*);
 		return getvfunc<oGetAbsOrigin>( this, 12 )( this );
 	}
+	
+	const QAngle& GetAbsAngles( )
+	{
+		typedef const QAngle& (* oGetAbsAngles)(void*);
+		return getvfunc<oGetAbsAngles>( this, 13 )( this );
+	}
 
 	void SetAbsOrigin( const Vector * const angles ) {
 		asm volatile ("mov %0, %%rdi;\n\t"
@@ -245,6 +252,11 @@ public:
 	bool* GetSpotted()
 	{
 		return (bool*)((uintptr_t)this + offsets.DT_BaseEntity.m_bSpotted);
+	}
+	
+	CBaseHandle* GetRefEHandle()
+	{
+		return (CBaseHandle*)((uintptr_t)this + offsets.DT_BaseEntity.m_RefEHandle);
 	}
 };
 

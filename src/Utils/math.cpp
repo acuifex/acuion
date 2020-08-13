@@ -93,6 +93,14 @@ void Math::NormalizeAngles(QAngle& angle)
 		angle.y += 360.f;
 }
 
+float Math::ReturningNormalizeYaw( float yaw ){
+	while ( yaw > 180.0f )
+		yaw -= 360.0f;
+	while ( yaw < -180.0f )
+		yaw += 360.0f;
+	return yaw;
+}
+
 void Math::NormalizeYaw( float& yaw ) {
 	while ( yaw > 180.0f )
 		yaw -= 360.0f;

@@ -504,94 +504,93 @@ static void DrawBulletTrace( C_BasePlayer* player ) {
 	Draw::AddLine( src.x, src.y, dst.x, dst.y, ESP::GetESPPlayerColor( player, true ) );
 	// Draw::AddRectFilled( ( int ) ( dst.x - 3 ), ( int ) ( dst.y - 3 ), 6, 6, ESP::GetESPPlayerColor( player, false ) ); // do we really need this? it's not drawing in valve and buggy in imgui
 }
-static void DrawAATrace( QAngle fake, QAngle actual ) {
-	C_BasePlayer* localPlayer = ( C_BasePlayer* ) entityList->GetClientEntity( engine->GetLocalPlayer() );
+static void DrawAATrace( QAngle fake, QAngle actual, C_BasePlayer* localplayer ) {
 	Vector src3D, dst3D, forward;
 	Vector src, dst;
-	trace_t tr;
-	Ray_t ray;
-	CTraceFilter filter;
-	char* string;
-	Vector2D nameSize;
 	ImColor color;
-
-	filter.pSkip = localPlayer;
-	src3D = localPlayer->GetVecOrigin();
+	
+	src3D = localplayer->GetVecOrigin();
 // LBY
-	Math::AngleVectors( QAngle(0, *localPlayer->GetLowerBodyYawTarget(), 0), forward );
-	dst3D = src3D + ( forward * 50 );
-
-	ray.Init( src3D, dst3D );
-
-	trace->TraceRay( ray, MASK_SHOT, &filter, &tr );
-
-	if ( debugOverlay->ScreenPosition( src3D, src ) || debugOverlay->ScreenPosition( tr.endpos, dst ) )
+	
+	Math::AngleVectors( QAngle(0, *localplayer->GetLowerBodyYawTarget(), 0), forward );
+	
+	if ( debugOverlay->ScreenPosition( src3D, src ) || debugOverlay->ScreenPosition( src3D + ( forward * 50.f ), dst ) )
 		return;
-
+	
 	color = ImColor( 135, 235, 169 );
 	Draw::AddLine( src.x, src.y, dst.x, dst.y, color );
-	// Draw::AddRectFilled( ( int ) ( dst.x - 3 ), ( int ) ( dst.y - 3 ), 6, 6, color );
-	string = XORSTR("LBY");
-	nameSize = Draw::GetTextSize( string, esp_font );
-	Draw::AddText(dst.x, dst.y, string, color );
+	Draw::AddText(dst.x, dst.y, XORSTR("LBY"), color );
 //////////////////////////////////
 
 // FAKE
 	Math::AngleVectors( QAngle(0, fake.y, 0), forward );
-	dst3D = src3D + ( forward * 50.f );
-
-	ray.Init( src3D, dst3D );
-
-	trace->TraceRay( ray, MASK_SHOT, &filter, &tr );
-
-	if ( debugOverlay->ScreenPosition( src3D, src ) || debugOverlay->ScreenPosition( tr.endpos, dst ) )
+	
+	if ( debugOverlay->ScreenPosition( src3D, src ) || debugOverlay->ScreenPosition( src3D + ( forward * 50.f ), dst ) )
 		return;
-
+	
 	color = ImColor( 5, 200, 5 );
 	Draw::AddLine( src.x, src.y, dst.x, dst.y, color );
-	// Draw::AddRectFilled( ( int ) ( dst.x - 3 ), ( int ) ( dst.y - 3 ), 6, 6, color );
-	string = XORSTR("FAKE");
-	nameSize = Draw::GetTextSize( string, esp_font );
-	Draw::AddText(dst.x, dst.y, string, color );
+	Draw::AddText(dst.x, dst.y, XORSTR("FAKE"), color );
 //////////////////////////////////
 
 // ACTUAL
 	Math::AngleVectors( QAngle(0, actual.y, 0), forward );
-	dst3D = src3D + ( forward * 50.f );
-
-	ray.Init( src3D, dst3D );
-
-	trace->TraceRay( ray, MASK_SHOT, &filter, &tr );
-
-	if ( debugOverlay->ScreenPosition( src3D, src ) || debugOverlay->ScreenPosition( tr.endpos, dst ) )
+	
+	if ( debugOverlay->ScreenPosition( src3D, src ) || debugOverlay->ScreenPosition( src3D + ( forward * 50.f ), dst ) )
 		return;
-
+	
 	color = ImColor( 225, 5, 5 );
 	Draw::AddLine( src.x, src.y, dst.x, dst.y, color );
-	// Draw::AddRectFilled( ( int ) ( dst.x - 3 ), ( int ) ( dst.y - 3 ), 6, 6, color );
-	string = XORSTR("REAL");
-	nameSize = Draw::GetTextSize( string, esp_font );
-	Draw::AddText(dst.x, dst.y, string, color );
+	Draw::AddText(dst.x, dst.y, XORSTR("REAL"), color );
 //////////////////////////////////
 
 // FEET YAW
-	Math::AngleVectors( QAngle(0, localPlayer->GetAnimState()->currentFeetYaw, 0), forward );
-	dst3D = src3D + ( forward * 50.f );
+	Math::AngleVectors( QAngle(0, localplayer->GetAnimState()->goalFeetYaw, 0), forward );
 
-	ray.Init( src3D, dst3D );
-
-	trace->TraceRay( ray, MASK_SHOT, &filter, &tr );
-
-	if ( debugOverlay->ScreenPosition( src3D, src ) || debugOverlay->ScreenPosition( tr.endpos, dst ) )
+	if ( debugOverlay->ScreenPosition( src3D, src ) || debugOverlay->ScreenPosition( src3D + ( forward * 50.f ), dst ) )
 		return;
 
 	color = ImColor( 225, 225, 80 );
 	Draw::AddLine( src.x, src.y, dst.x, dst.y, color );
-	// Draw::AddRectFilled( ( int ) ( dst.x - 3 ), ( int ) ( dst.y - 3 ), 6, 6, color );
-	string = XORSTR("FEET");
-	nameSize = Draw::GetTextSize( string, esp_font );
-	Draw::AddText(dst.x, dst.y, string, color );
+	Draw::AddText(dst.x, dst.y, XORSTR("GOAL FEET"), color );
 //////////////////////////////////
+
+}
+static void DrawHitbox( C_BasePlayer* entity ) {
+	static std::map<int, long> playerDrawTimes;
+    if ( playerDrawTimes.find( entity->GetIndex() ) == playerDrawTimes.end() ) { // haven't drawn this player yet
+        playerDrawTimes[entity->GetIndex()] = Util::GetEpochTime();
+    }
+
+    matrix3x4_t matrix[128];
+
+    if ( !entity->SetupBones( matrix, 128, 0x00000100, globalVars->curtime ) )
+        return;
+
+    studiohdr_t* hdr = modelInfo->GetStudioModel( entity->GetModel() );
+    mstudiohitboxset_t* set = hdr->pHitboxSet( 0 ); // :^)
+
+    long diffTime = Util::GetEpochTime() - playerDrawTimes.at( entity->GetIndex() );
+    if ( diffTime >= 12 ) {
+        for ( int i = 0; i < set->numhitboxes; i++ ) {
+            mstudiobbox_t* hitbox = set->pHitbox( i );
+            if ( !hitbox ) {
+                continue;
+            }
+            Vector vMin, vMax;
+            Math::VectorTransform( hitbox->bbmin, matrix[hitbox->bone], vMin );
+            Math::VectorTransform( hitbox->bbmax, matrix[hitbox->bone], vMax );
+			if (hitbox->radius > -1)
+				// TODO: we should draw this only for 1 frame.
+				// globalVars->frametime or globalVars->interval_per_tick ?
+				// or even use other hook? createmove (probably bad idea) instead of paint?
+				// or just fucking use imgui magic?
+                debugOverlay->DrawPill( vMin, vMax, hitbox->radius, 255, 0, 0, 120, false );
+			// else
+			// 	debugOverlay->Drawbox()
+        }
+        playerDrawTimes[entity->GetIndex()] = Util::GetEpochTime();
+    }
 }
 static void DrawTracer( C_BasePlayer* player ) {
 	Vector src3D;
@@ -1011,9 +1010,10 @@ static void DrawPlayer(C_BasePlayer* player)
 	if (!GetBox(player, x, y, w, h))
 		return;
 
-	if (Settings::ESP::Boxes::enabled)
+	if (Settings::ESP::Boxes::enabled){
 		DrawBox(playerColor, x, y, w, h, player);
-
+		// DrawHitbox(player);
+	}
 	if (Settings::ESP::Sprite::enabled)
         DrawSprite(x, y, w, h, player);
 
@@ -1680,7 +1680,7 @@ void ESP::Paint()
 		}
 	}
 	if (Settings::ThirdPerson::enabled)
-		DrawAATrace(fake, actual);
+		DrawAATrace(fake, actual, localplayer);
 	if (Settings::ESP::FOVCrosshair::enabled)
 		DrawFOVCrosshair();
 	if (Settings::ESP::Spread::enabled || Settings::ESP::Spread::spreadLimit)

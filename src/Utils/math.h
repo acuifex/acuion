@@ -11,6 +11,7 @@ namespace Math {
 	void AngleVectors(const QAngle &angles, Vector& forward, Vector& right, Vector& up);
 	void NormalizeAngles(QAngle& angle);
 	void NormalizeYaw( float& yaw );
+	float ReturningNormalizeYaw( float yaw );
 	void ClampAngles(QAngle& angle);
 	void CorrectMovement(const QAngle &vOldAngles, CUserCmd* pCmd, float fOldForward, float fOldSidemove);
 	float GetFov(const QAngle &viewAngle, const QAngle &aimAngle);

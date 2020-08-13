@@ -118,6 +118,12 @@ static void DrawRecord(void* thisptr, void* context, void *state, const ModelRen
     C_BasePlayer* localplayer = (C_BasePlayer*) entityList->GetClientEntity(engine->GetLocalPlayer());
 	if (!localplayer)
 		return;
+	
+	C_BasePlayer* entity = (C_BasePlayer*) entityList->GetClientEntity(pInfo.entity_index);
+	if (!entity
+	    || !entity->GetAlive())
+		return;
+		
 	if (LagComp::ticks.empty())
 		return;
 
@@ -128,10 +134,10 @@ static void DrawRecord(void* thisptr, void* context, void *state, const ModelRen
 	auto &tick = LagComp::ticks.back();
 	for (auto &record : tick.records)
 	{
-		if (!record.boneMatrix)
+		if (!record.boneMatrix || entity != record.entity)
 			continue;
 
-		(Vector)pInfo.origin = record.origin;
+		// pInfo.origin = record.origin;
 		modelRender->ForcedMaterialOverride(visible_material);
 		modelRenderVMT->GetOriginalMethod<DrawModelExecuteFn>(21)(thisptr, context, state, pInfo, (matrix3x4_t*)record.boneMatrix);
 	}
@@ -201,7 +207,7 @@ void Chams::DrawModelExecute(void* thisptr, void* context, void *state, const Mo
 	std::string modelName = modelInfo->GetModelName(pInfo.pModel);
 
 	if (modelName.find(XORSTR("models/player")) != std::string::npos){
-		// DrawRecord(thisptr, context, state, pInfo, pCustomBoneToWorld);
+		DrawRecord(thisptr, context, state, pInfo, pCustomBoneToWorld);
 		DrawPlayer(thisptr, context, state, pInfo, pCustomBoneToWorld);
 	}
 	else if (modelName.find(XORSTR("arms")) != std::string::npos)

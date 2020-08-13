@@ -6,6 +6,7 @@
 #include "../Utils/math.h"
 #include "../Utils/entity.h"
 #include "../Utils/bonemaps.h"
+#include "../Hooks/hooks.h"
 #include "../settings.h"
 #include "../interfaces.h"
 
@@ -489,7 +490,7 @@ static void AimStep(C_BasePlayer* player, QAngle& angle, CUserCmd* cmd)
 		return;
 
 	if (!Aimbot::aimStepInProgress)
-		AimStepLastAngle = cmd->viewangles;
+		AimStepLastAngle = CreateMove::lastTickViewAngles;
 
 	if (!player)
 		return;

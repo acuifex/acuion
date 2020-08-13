@@ -45,9 +45,9 @@ bool Hooks::CreateMove(void* thisptr, float flInputSampleTime, CUserCmd* cmd)
         CreateMove::sendPacket = true;
 
 		/* run code that affects movement before prediction */
+		AutoStrafe::CreateMove(cmd);
 		BHop::CreateMove(cmd);
 		NoDuckCooldown::CreateMove(cmd);
-		AutoStrafe::CreateMove(cmd);
 		ShowRanks::CreateMove(cmd);
 		AutoDefuse::CreateMove(cmd);
 		JumpThrow::CreateMove(cmd);
