@@ -89,40 +89,44 @@ void Visuals::RenderTab()
 			w -= 20.f;
 		ImGui::BeginChild(XORSTR("Categories"), ImVec2(0, 0), true);
 		{
-			ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(Settings::UI::mainColor.Color().Value.x, Settings::UI::mainColor.Color().Value.y, Settings::UI::mainColor.Color().Value.z, Settings::UI::mainColor.Color().Value.w));
+			if ( current_category == Category::ESP )
+			{
+			    if (ImGui::Button("ESP", ImVec2(w, w)))
+				current_category = Category::ESP;
+			}
+			else
+			{
+			    ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(Settings::UI::mainColor.Color().Value.x, Settings::UI::mainColor.Color().Value.y, Settings::UI::mainColor.Color().Value.z, Settings::UI::mainColor.Color().Value.w));
+			    if (ImGui::Button("ESP", ImVec2(w, w)))
+				current_category = Category::ESP;
+			    ImGui::PopStyleColor();
+			}
 
-            if (ImGui::Button("ESP", ImVec2(w, w)))
-                current_category = Category::ESP;
-            if (ImGui::Button("Local", ImVec2(w, w)))
-                current_category = Category::LOCAL;
-            if (ImGui::Button("World", ImVec2(w, w)))
-                current_category = Category::WORLD;
-            switch(current_category) { // todo: wtf is even that? my ide says "switch has 3 consecutive identical branches"
-                                        // and when ide says that then you're really fucking up
-                                        // anyway, i fixed the crash.
-                case Category::ESP:
-                    ImGui::PopStyleColor();
-                    ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(Settings::UI::mainColor.Color().Value.x,
-                                                                  Settings::UI::mainColor.Color().Value.y,
-                                                                  Settings::UI::mainColor.Color().Value.z,
-                                                                  Settings::UI::mainColor.Color().Value.w));
-                    break;
-                case Category::LOCAL:
-                    ImGui::PopStyleColor();
-                    ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(Settings::UI::mainColor.Color().Value.x,
-                                                                  Settings::UI::mainColor.Color().Value.y,
-                                                                  Settings::UI::mainColor.Color().Value.z,
-                                                                  Settings::UI::mainColor.Color().Value.w));
-                    break;
-                case Category::WORLD:
-                    ImGui::PopStyleColor();
-                    ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(Settings::UI::mainColor.Color().Value.x,
-                                                                  Settings::UI::mainColor.Color().Value.y,
-                                                                  Settings::UI::mainColor.Color().Value.z,
-                                                                  Settings::UI::mainColor.Color().Value.w));
-                    break;
-            }
-			ImGui::PopStyleColor();
+			if ( current_category == Category::LOCAL )
+			{
+			    if (ImGui::Button("Local", ImVec2(w, w)))
+				current_category = Category::LOCAL;
+			}
+			else
+			{
+			    ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(Settings::UI::mainColor.Color().Value.x, Settings::UI::mainColor.Color().Value.y, Settings::UI::mainColor.Color().Value.z, Settings::UI::mainColor.Color().Value.w));
+			    if (ImGui::Button("Local", ImVec2(w, w)))
+				current_category = Category::LOCAL;
+			    ImGui::PopStyleColor();
+			}
+
+			if ( current_category == Category::WORLD )
+			{
+			    if (ImGui::Button("World", ImVec2(w, w)))
+				current_category = Category::WORLD;
+			}
+			else
+			{
+			    ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(Settings::UI::mainColor.Color().Value.x, Settings::UI::mainColor.Color().Value.y, Settings::UI::mainColor.Color().Value.z, Settings::UI::mainColor.Color().Value.w));
+			    if (ImGui::Button("World", ImVec2(w, w)))
+				current_category = Category::WORLD;
+			    ImGui::PopStyleColor();
+			}
 		}
 		ImGui::EndChild();
 	}
