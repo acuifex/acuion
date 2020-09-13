@@ -659,6 +659,8 @@ namespace Settings
 	namespace Resolver
 	{
 		inline bool resolveAll = false;
+		inline bool forceYaw = false;
+		inline float angle = 180.0f;
 	}
 
 	namespace ESP
