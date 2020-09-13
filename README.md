@@ -1,10 +1,10 @@
 # acuion / acuifex fork
 Here are some of my configs that i use: </br>
 https://github.com/acuifex/acuion-personal-configs 
-Newest Updates :
-Skins                (Credits OtakuLinux & Karl)
-Vote Reveal          (Credits auyylaso)
-Nimbus Resolver      (Credits Zedespook)
+Newest Updates :                                      </br>
+Skins                (Credits OtakuLinux & Karl)      </br>
+Vote Reveal          (Credits auyylaso)               </br>
+Nimbus Resolver      (Credits Zedespook)              </br>
 
 # Original fuzion readme
 <p align="center">
