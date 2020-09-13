@@ -37,6 +37,6 @@ void Hooks::FrameStageNotify(void* thisptr, ClientFrameStage_t stage)
 
 	clientVMT->GetOriginalMethod<FrameStageNotifyFn>(37)(thisptr, stage);
 
-	Resolver::PostFrameStageNotify(stage);
+//	Resolver::PostFrameStageNotify(stage);
 	View::PostFrameStageNotify(stage);
 }
