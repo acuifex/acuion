@@ -1,6 +1,4 @@
 # acuion / acuifex fork
-Here are some of my configs that i use: </br>
-https://github.com/acuifex/acuion-personal-configs 
 Newest Updates :                                      </br>
 Skins                (Credits OtakuLinux & Karl)      </br>
 Vote Reveal          (Credits auyylaso)               </br>
@@ -131,6 +129,12 @@ On your command line, you can also add the -a flag on `ls` e.g.
 ```bash
 ls -la ~/
 ```
+</br>
+Personal Configs
+</br>
+acuifex: 
+https://github.com/acuifex/acuion-personal-configs
+</br>
 
 
 ## Grenade Configs
