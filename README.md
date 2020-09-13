@@ -116,7 +116,7 @@ If you wish to unload the hack from the game, you can do so by entering the comm
 
 Configs are stored in a hidden directory in your home folder. Specifically 
 ```
-~/.config/Fuzion
+~/.config/acuion
 ```
 
 Each `config.json` is stored in a seperately named folder (The name you see in-game, in the config window). 
