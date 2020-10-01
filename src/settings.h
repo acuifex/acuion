@@ -1229,15 +1229,25 @@ namespace Settings
 	namespace ThirdPerson
 	{
         inline bool enabled = false;
+		inline bool toggled = true;
         inline float distance = 80.f;
         inline ShowedAngle type = ShowedAngle::REAL;
-        inline ButtonCode_t key = ButtonCode_t::KEY_V;
+        inline ButtonCode_t key = ButtonCode_t::KEY_LALT;
 	}
 
 	namespace JumpThrow
 	{
 		inline bool enabled = false;
 		inline ButtonCode_t key = ButtonCode_t::KEY_T;
+	}
+
+	namespace ProfileChanger
+	{
+		extern int coinID;
+		extern int musicID;
+		extern int compRank;
+		extern int weaponStatus;
+		extern int weaponRarity;
 	}
 
 	namespace NoFall
