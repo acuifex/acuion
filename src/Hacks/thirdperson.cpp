@@ -5,7 +5,7 @@
 #include "../interfaces.h"
 
 QAngle fakeang= {0.0f, 0.0f, 0.0f}, realang = {0.0f, 0.0f, 0.0f};
-static bool buttonToggle = false;
+bool buttonToggle = false;
 
 void ThirdPerson::OverrideView(CViewSetup *pSetup)
 {
