@@ -204,14 +204,19 @@ void Chams::DrawModelExecute(void* thisptr, void* context, void *state, const Mo
 		materialsCreated = true;
 	}
 
-	std::string modelName = modelInfo->GetModelName(pInfo.pModel);
+	const char *modelName = modelInfo->GetModelName(pInfo.pModel);
 
-	if (modelName.find(XORSTR("models/player")) != std::string::npos){
+	if (strstr(modelName, XORSTR("models/player")))
+	{
 		DrawRecord(thisptr, context, state, pInfo, pCustomBoneToWorld);
 		DrawPlayer(thisptr, context, state, pInfo, pCustomBoneToWorld);
 	}
-	else if (modelName.find(XORSTR("arms")) != std::string::npos)
+	else if (strstr(modelName, XORSTR("arms")))
+	{
 		DrawArms(pInfo);
-	else if (modelName.find(XORSTR("weapon")) != std::string::npos)
+	}
+	else if (strstr(modelName, XORSTR("weapon")))
+	{
 		DrawWeapon(pInfo);
+	}
 }
