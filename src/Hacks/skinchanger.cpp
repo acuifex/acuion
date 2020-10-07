@@ -433,6 +433,68 @@ void SkinChanger::SetViewModelSequence(const CRecvProxyData *pDataConst, void *p
 						break;
 				}
 			}
+
+			else if (szModel == "models/weapons/v_knife_cord.mdl")
+			{
+				// Fix animations for the Ursus Knife.
+				switch (m_nSequence)
+				{
+					case SEQUENCE_DEFAULT_DRAW:
+						m_nSequence = Util::RandomInt(SEQUENCE_BUTTERFLY_DRAW, SEQUENCE_BUTTERFLY_DRAW2);
+						break;
+					case SEQUENCE_DEFAULT_LOOKAT01:
+						m_nSequence = Util::RandomInt(SEQUENCE_BUTTERFLY_LOOKAT01, 14);
+						break;
+					default:
+						m_nSequence++;
+				}
+			}
+			else if (szModel == "models/weapons/v_knife_canis.mdl")
+			{
+				// Fix animations for the Ursus Knife.
+				switch (m_nSequence)
+				{
+					case SEQUENCE_DEFAULT_DRAW:
+						m_nSequence = Util::RandomInt(SEQUENCE_BUTTERFLY_DRAW, SEQUENCE_BUTTERFLY_DRAW2);
+						break;
+					case SEQUENCE_DEFAULT_LOOKAT01:
+						m_nSequence = Util::RandomInt(SEQUENCE_BUTTERFLY_LOOKAT01, 14);
+						break;
+					default:
+						m_nSequence++;
+				}
+			}
+			else if (szModel == "models/weapons/v_knife_outdoor.mdl")
+			{
+				// Fix animations for the Ursus Knife.
+				switch (m_nSequence)
+				{
+					case SEQUENCE_DEFAULT_DRAW:
+						m_nSequence = Util::RandomInt(SEQUENCE_BUTTERFLY_DRAW, SEQUENCE_BUTTERFLY_DRAW2);
+						break;
+					case SEQUENCE_DEFAULT_LOOKAT01:
+						m_nSequence = Util::RandomInt(SEQUENCE_BUTTERFLY_LOOKAT01, 14);
+						break;
+					default:
+						m_nSequence++;
+				}
+			}
+			else if (szModel == "models/weapons/v_knife_skeleton.mdl")
+			{
+				// Fix animations for the Ursus Knife.
+				switch (m_nSequence)
+				{
+					case SEQUENCE_DEFAULT_DRAW:
+						m_nSequence = Util::RandomInt(SEQUENCE_BUTTERFLY_DRAW, SEQUENCE_BUTTERFLY_DRAW2);
+						break;
+					case SEQUENCE_DEFAULT_LOOKAT01:
+						m_nSequence = Util::RandomInt(SEQUENCE_BUTTERFLY_LOOKAT01, 14);
+						break;
+					default:
+						m_nSequence++;
+				}
+			}
+
 			//else if (szModel == "models/weapons/v_knife_gg.mdl")
 			//{
 			//		Fix animations for the Gold Knife.
@@ -453,3 +515,4 @@ void SkinChanger::SetViewModelSequence(const CRecvProxyData *pDataConst, void *p
 
 	fnSequenceProxyFn(pData, pStruct, pOut);
 }
+ 

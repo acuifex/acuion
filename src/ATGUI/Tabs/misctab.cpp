@@ -24,13 +24,15 @@ static char nickname[127] = "";
 
 void Misc::RenderTab()
 {
-	const char* strafeTypes[] = { "Forwards", "Backwards", "Left", "Right", "Rage" };
-	const char* animationTypes[] = { "Static", "Marquee", "Words", "Letters" };
-	const char* spammerTypes[] = { "None", "Normal", "Positions" };
-	const char* teams[] = { "Allies", "Enemies", "Both" };
-	const char* grenadeTypes[] = { "FLASH", "SMOKE", "MOLOTOV", "HEGRENADE" };
-	const char* throwTypes[] = { "NORMAL", "RUN", "JUMP", "WALK" };
-	const char* angleTypes[] = { "Real", "Fake" };
+	// static is a bit of a optimization. compiler probably does this too but it is better to be safe.
+	static const char* voteCastTypes[] = { "Console", "Chat", "TeamSideChat" };
+	static const char* strafeTypes[] = { "Forwards", "Backwards", "Left", "Right", "Rage" };
+	static const char* animationTypes[] = { "Static", "Marquee", "Words", "Letters" };
+	static const char* spammerTypes[] = { "None", "Normal", "Positions" };
+	static const char* teams[] = { "Allies", "Enemies", "Both" };
+	static const char* grenadeTypes[] = { "FLASH", "SMOKE", "MOLOTOV", "HEGRENADE" };
+	static const char* throwTypes[] = { "NORMAL", "RUN", "JUMP", "WALK" };
+	static const char* angleTypes[] = { "Real", "Fake" };
 
 	ImGui::Columns(2, nullptr, true);
 	{
@@ -430,15 +432,16 @@ void Misc::RenderTab()
 			{
 				ImGui::Checkbox(XORSTR("Fake Lag"), &Settings::FakeLag::enabled);
 				ImGui::Checkbox(XORSTR("Adaptive Fake Lag"), &Settings::FakeLag::adaptive);
+				ImGui::Checkbox(XORSTR("Show Votes"), &Settings::voteCast::enabled);
 				ImGui::Checkbox(XORSTR("Auto Accept"), &Settings::AutoAccept::enabled);
 				ImGui::Checkbox(XORSTR("AirStuck"), &Settings::Airstuck::enabled);
 				ImGui::Checkbox(XORSTR("Autoblock"), &Settings::Autoblock::enabled);
 				ImGui::Checkbox(XORSTR("Jump Throw"), &Settings::JumpThrow::enabled);
 				ImGui::Checkbox(XORSTR("Auto Defuse"), &Settings::AutoDefuse::enabled);
 				ImGui::Checkbox(XORSTR("Sniper Crosshair"), &Settings::SniperCrosshair::enabled);
-                ImGui::Checkbox(XORSTR("BackTrack"), &Settings::LagComp::enabled);
-                ImGui::Checkbox(XORSTR("Disable post-processing"), &Settings::DisablePostProcessing::enabled);
-                ImGui::Checkbox(XORSTR("No Duck Cooldown"), &Settings::NoDuckCooldown::enabled);
+				ImGui::Checkbox(XORSTR("BackTrack"), &Settings::LagComp::enabled);
+				ImGui::Checkbox(XORSTR("Disable post-processing"), &Settings::DisablePostProcessing::enabled);
+				ImGui::Checkbox(XORSTR("No Duck Cooldown"), &Settings::NoDuckCooldown::enabled);
                 ImGui::Checkbox(XORSTR("Skateboarding"), &Settings::Skateboarding::enabled);
 			}
 			ImGui::NextColumn();
@@ -447,13 +450,14 @@ void Misc::RenderTab()
 				ImGui::SliderInt(XORSTR("##FAKELAGAMOUNT"), &Settings::FakeLag::value, 0, 16, XORSTR("Amount: %0.f"));
 				ImGui::PopItemWidth();
 				ImGui::Checkbox(XORSTR("Show Ranks"), &Settings::ShowRanks::enabled);
+				ImGui::Combo(XORSTR("##SHOWVOTETYPE"), (int *)&Settings::voteCast::type, voteCastTypes, IM_ARRAYSIZE(voteCastTypes));
 				ImGui::Checkbox(XORSTR("Screenshot Cleaner"), &Settings::ScreenshotCleaner::enabled);
 				UI::KeyBindButton(&Settings::Airstuck::key);
 				UI::KeyBindButton(&Settings::Autoblock::key);
 				UI::KeyBindButton(&Settings::JumpThrow::key);
 				ImGui::Checkbox(XORSTR("Silent Defuse"), &Settings::AutoDefuse::silent);
 				ImGui::Checkbox(XORSTR("Attempt NoFall"), &Settings::NoFall::enabled);
-                ImGui::SliderFloat(XORSTR("##BTWINDOW"), &Settings::LagComp::window, 0.f, 200.f, XORSTR("ms: %0.f"));
+				ImGui::SliderFloat(XORSTR("##BTWINDOW"), &Settings::LagComp::window, 0.f, 200.f, XORSTR("ms: %0.f"));
 			}
 			ImGui::Columns(1);
 			ImGui::Separator();

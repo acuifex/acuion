@@ -50,6 +50,13 @@ enum class AutostrafeType : int
 	AS_RAGE,
 };
 
+enum class voteCastType : int
+{
+	Console,
+	Chat,
+	TeamSideChat,
+};
+
 enum class ChamsType : int
 {
 	CHAMS,
@@ -1129,7 +1136,13 @@ namespace Settings
 	{
 		inline bool enabled = false;
 	}
-
+	
+	namespace voteCast
+	{
+		inline bool enabled;
+		inline voteCastType type;
+	}
+	
 	namespace ShowSpectators
 	{
 		inline bool enabled = false;

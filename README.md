@@ -16,6 +16,8 @@ https://github.com/acuifex/acuion-personal-configs
 * AA yaw follow setting
 * Offset yaw by desync value in percents
 * Skateboarding!
+* Show votes #12
+* Skins updated #12
 
 # Original fuzion readme
 <p align="center">
