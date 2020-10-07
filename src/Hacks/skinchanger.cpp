@@ -433,7 +433,6 @@ void SkinChanger::SetViewModelSequence(const CRecvProxyData *pDataConst, void *p
 						break;
 				}
 			}
-
 			else if (szModel == "models/weapons/v_knife_cord.mdl")
 			{
 				// Fix animations for the Ursus Knife.
@@ -494,7 +493,6 @@ void SkinChanger::SetViewModelSequence(const CRecvProxyData *pDataConst, void *p
 						m_nSequence++;
 				}
 			}
-
 			//else if (szModel == "models/weapons/v_knife_gg.mdl")
 			//{
 			//		Fix animations for the Gold Knife.

@@ -57,6 +57,17 @@ enum class voteCastType : int
 	TeamSideChat,
 };
 
+enum class ProfileChangerRarity : int
+{
+	Consumer,
+	Industrial,
+	Mil_Spec,
+	Restricted,
+	Clasified,
+	Covert,
+	Contraband,
+};
+
 enum class ChamsType : int
 {
 	CHAMS,
@@ -1242,6 +1253,7 @@ namespace Settings
 	namespace ThirdPerson
 	{
         inline bool enabled = false;
+		inline bool toggled = true;
         inline float distance = 80.f;
         inline ShowedAngle type = ShowedAngle::REAL;
         inline ButtonCode_t key = ButtonCode_t::KEY_V;
@@ -1251,6 +1263,15 @@ namespace Settings
 	{
 		inline bool enabled = false;
 		inline ButtonCode_t key = ButtonCode_t::KEY_T;
+	}
+
+	namespace ProfileChanger
+	{
+		inline int coinID = 890;
+		inline int musicID = 10;
+		inline int compRank = 18;
+		inline int weaponStatus = 0;
+		inline ProfileChangerRarity weaponRarity = ProfileChangerRarity::Consumer;
 	}
 
 	namespace NoFall

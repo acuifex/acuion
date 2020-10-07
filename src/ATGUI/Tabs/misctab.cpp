@@ -17,10 +17,12 @@
 #include "../../Hacks/grenadehelper.h"
 #include "../../Hacks/clantagchanger.h"
 #include "../../Hacks/valvedscheck.h"
+#include "../../Hacks/profilechanger.h"
 
 #pragma GCC diagnostic ignored "-Wformat-security"
 
 static char nickname[127] = "";
+static char weapon[50] = "";
 
 void Misc::RenderTab()
 {
@@ -33,6 +35,9 @@ void Misc::RenderTab()
 	static const char* grenadeTypes[] = { "FLASH", "SMOKE", "MOLOTOV", "HEGRENADE" };
 	static const char* throwTypes[] = { "NORMAL", "RUN", "JUMP", "WALK" };
 	static const char* angleTypes[] = { "Real", "Fake" };
+	static const char* openSkinType[] = { "StatTrak", "Non-StatTrak" };
+	static const char* openSkinRarity[] = { "Consumer grade (White)", "Industrial (Light blue)", "Mil-spec (Darker blue)", "Restricted (Purple)", "Classified (Pinkish purple)", "Covert (Red)", "Contraband (Yellow Orange)"};
+
 
 	ImGui::Columns(2, nullptr, true);
 	{
@@ -414,6 +419,23 @@ void Misc::RenderTab()
 
 				ImGui::EndPopup();
 			}
+			if (ImGui::Button(XORSTR("Set Banned-Name")))
+			{
+				std::string banNameGlitch = " \x07";
+				banNameGlitch += std::string(nickname);
+				banNameGlitch += XORSTR(" \x07has been permanently banned from official CS:GO servers.");
+
+				if(strlen(nickname) < 6)
+				{
+					for(int i = 0; i < 6 - strlen(nickname); i++)
+					{
+						banNameGlitch += "\n";
+					}
+				}
+
+				banNameGlitch += XORSTR(" \x01⠀You ");
+				NameChanger::SetName(banNameGlitch.c_str());
+			}
 			ImGui::Columns(2, nullptr, true);
 			{
 				if (ImGui::Checkbox(XORSTR("Name Stealer"), &Settings::NameStealer::enabled))
@@ -422,6 +444,65 @@ void Misc::RenderTab()
 			ImGui::NextColumn();
 			{
 				ImGui::Combo("", &Settings::NameStealer::team, teams, IM_ARRAYSIZE(teams));
+			}
+
+			ImGui::Columns(1);
+			ImGui::Separator();
+			ImGui::Text(XORSTR("Fake unbox"));
+			ImGui::Separator();
+			ImGui::Columns(2, nullptr, true);
+			{
+				ImGui::Text(XORSTR("Weapon status:"));
+				ImGui::Text(XORSTR("Weapon rarity:"));
+				ImGui::Text(XORSTR("Weapons  name and skin:"));
+				if (ImGui::Button(XORSTR("Set Skin-Opened-Name"))){
+					std::string skinOpenedGlitch = "Player \x01\x0B\x09";
+					skinOpenedGlitch += std::string(nickname);
+					skinOpenedGlitch += XORSTR(" \x01has opened a container and found:");
+					
+					switch (Settings::ProfileChanger::weaponRarity){
+						case ProfileChangerRarity::Consumer:
+							skinOpenedGlitch += XORSTR(" \x08"); // Consumer
+							break;
+						case ProfileChangerRarity::Industrial:
+							skinOpenedGlitch += XORSTR(" \x0B"); // Industrial
+							break;
+						case ProfileChangerRarity::Mil_Spec:
+							skinOpenedGlitch += XORSTR(" \x0C"); // Mil-Spec
+							break;
+						case ProfileChangerRarity::Restricted:
+							skinOpenedGlitch += XORSTR(" \x03"); // Restricted
+							break;
+						case ProfileChangerRarity::Clasified:
+							skinOpenedGlitch += XORSTR(" \x0E"); // Clasified
+							break;
+						case ProfileChangerRarity::Covert:
+							skinOpenedGlitch += XORSTR(" \x02"); // Covert
+							break;
+						case ProfileChangerRarity::Contraband:
+							skinOpenedGlitch += XORSTR(" \x10"); // Contraband
+							break;
+					}
+					if (Settings::ProfileChanger::weaponStatus == 0){
+						skinOpenedGlitch += XORSTR("StatTrak™ ");
+					}
+					skinOpenedGlitch += std::string(weapon);
+					if (Settings::ProfileChanger::weaponStatus == 1 && strlen(weapon) < 12){
+						skinOpenedGlitch += XORSTR(" \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n");
+					} else if (Settings::ProfileChanger::weaponStatus == 1 && strlen(weapon) > 11){
+						skinOpenedGlitch += XORSTR(" \n \n \n \n \n \n \n \n");
+					}
+					skinOpenedGlitch += XORSTR(" \n \n \n \n \n \x01⠀You");
+					NameChanger::SetName(skinOpenedGlitch.c_str());
+				}
+			}
+			ImGui::NextColumn();
+			{
+				ImGui::PushItemWidth(-1);
+				ImGui::Combo(XORSTR("##WEAPONSTATUS"), &Settings::ProfileChanger::weaponStatus, openSkinType, IM_ARRAYSIZE(openSkinType));
+				ImGui::Combo(XORSTR("##WEAPONRARITY"), (int*)&Settings::ProfileChanger::weaponRarity, openSkinRarity, IM_ARRAYSIZE(openSkinRarity));
+				ImGui::InputText(XORSTR("##WEAPON"), weapon, 50);
+				ImGui::PopItemWidth();
 			}
 
 			ImGui::Columns(1);
@@ -458,6 +539,19 @@ void Misc::RenderTab()
 				ImGui::Checkbox(XORSTR("Silent Defuse"), &Settings::AutoDefuse::silent);
 				ImGui::Checkbox(XORSTR("Attempt NoFall"), &Settings::NoFall::enabled);
 				ImGui::SliderFloat(XORSTR("##BTWINDOW"), &Settings::LagComp::window, 0.f, 200.f, XORSTR("ms: %0.f"));
+			}
+			ImGui::Columns(1);
+			ImGui::Separator();
+
+			ImGui::Text(XORSTR("Profile Changer"));
+			ImGui::Separator();
+			ImGui::Columns(1, nullptr, true);
+			{
+				ImGui::InputInt(XORSTR("COIN##ID"), &Settings::ProfileChanger::coinID);
+				ImGui::InputInt(XORSTR("MUSIC KIT##ID"), &Settings::ProfileChanger::musicID);
+				ImGui::InputInt(XORSTR("COMP RANK##ID"), &Settings::ProfileChanger::compRank);
+				if (ImGui::Button(XORSTR("Update profile"), ImVec2(-1, 0)))
+					ProfileChanger::UpdateProfile();
 			}
 			ImGui::Columns(1);
 			ImGui::Separator();
