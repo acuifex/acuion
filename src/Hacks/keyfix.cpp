@@ -10,6 +10,9 @@ void KeyFix::CreateMove(CUserCmd* cmd){
 	if (!localplayer || !localplayer->GetAlive())
 		return;
 	
+	if (localplayer->GetMoveType() == MOVETYPE_LADDER || localplayer->GetMoveType() == MOVETYPE_NOCLIP)
+		return;
+	
 	cmd->buttons &= ~IN_BACK; // reset keys
 	cmd->buttons &= ~IN_FORWARD;
 	cmd->buttons &= ~IN_MOVELEFT;
