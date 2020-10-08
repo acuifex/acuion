@@ -19,8 +19,8 @@ https://github.com/acuifex/acuion-personal-configs
 * Skateboarding!
 * Show votes [#12](../../issues/12)
 * Skins updated [#12](../../issues/12)
-* Profile changer (only shows in game for me) [#16](../../issues/12)
-* Ban and unbox names (a bit buggy) [#16](../../issues/12)
+* Profile changer (only shows in game for me) [#16](../../issues/16)
+* Ban and unbox names (a bit buggy) [#16](../../issues/16)
 
 # Original fuzion readme
 <p align="center">
