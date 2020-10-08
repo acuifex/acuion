@@ -7,7 +7,6 @@
 #include <algorithm>
 
 std::vector<LagComp::BacktrackTick> LagComp::ticks;
-CUserCmd* pubcmd;
 
 float GetLerpTime()
 {
@@ -87,7 +86,9 @@ void RegisterTick()
             entity->GetImmune())
             continue;
         const std::unordered_map<int, int> *modelType = BoneMaps::GetModelTypeBoneMap(entity);
-        LagComp::BacktrackRecord record = LagComp::BacktrackRecord{entity, entity->GetBonePosition((*modelType).at(BONE_HEAD)), entity->GetVecOrigin()};
+        LagComp::BacktrackRecord record = LagComp::BacktrackRecord{entity,
+																   entity->GetBonePosition((*modelType).at(BONE_HEAD)),
+																   entity->GetVecOrigin()};
 
 /*        *(int*)((uintptr_t)record.entity + 0xA30) = globalVars->framecount; // getting some weird stretch of model pls send halp
         *(int*)((uintptr_t)record.entity + 0xA28) = 0;*/

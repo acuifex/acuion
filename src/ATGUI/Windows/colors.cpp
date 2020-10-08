@@ -58,7 +58,7 @@ void Colors::RenderWindow()
 		}
 	};
 
-	ColorListVar colors[] = {
+	static const ColorListVar colors[] = {
 			{ "UI Main", &Settings::UI::mainColor },
 			{ "UI Body", &Settings::UI::bodyColor },
 			{ "UI Font", &Settings::UI::fontColor },
@@ -110,6 +110,8 @@ void Colors::RenderWindow()
 			{ "Chams - Team Visible", &Settings::ESP::Chams::allyVisibleColor },
 			{ "Chams - Enemy", &Settings::ESP::Chams::enemyColor },
 			{ "Chams - Enemy Visible", &Settings::ESP::Chams::enemyVisibleColor },
+			{ "Chams - Backtrack", &Settings::ESP::Chams::backtrackColor },
+			{ "Chams - Backtrack Visible", &Settings::ESP::Chams::backtrackVisibleColor },
 			{ "Chams - LocalPlayer", &Settings::ESP::Chams::localplayerColor },
 			{ "Chams - Arms", &Settings::ESP::Chams::Arms::color },
 			{ "Chams - Weapon", &Settings::ESP::Chams::Weapon::color },

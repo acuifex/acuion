@@ -449,26 +449,26 @@ static void DoAntiAimFake(QAngle &angle, CCSGOAnimState* animState)
 	if (!animState)
 		return;
 
-	float maxDelta = AntiAim::GetMaxDelta(animState);
+	// float maxDelta = AntiAim::GetMaxDelta(animState);
 	static bool yFlip = false;
 
 	switch (Settings::AntiAim::Fake::type)
 	{
 		case AntiAimYaw_Fake::STATIC_LEFT:
-			angle.y += maxDelta;
+			angle.y += 120; // remove these annoying ACT_CSGO_IDLE_TURN_BALANCEADJUST
 			break;
 
 		case AntiAimYaw_Fake::STATIC_RIGHT:
-			angle.y -= maxDelta;
+			angle.y += 120;
 			break;
 
 		case AntiAimYaw_Fake::JITTER:
-			angle.y += yFlip ? maxDelta : -maxDelta;
+			angle.y += yFlip ? 120 : -120;
 			yFlip = !yFlip;
 			break;
 
 		case AntiAimYaw_Fake::MANUAL:
-			angle.y += manualswitch ? maxDelta : -maxDelta;
+			angle.y += manualswitch ? 120 : -120;
 			break;
 	}
 }

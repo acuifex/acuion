@@ -5,6 +5,7 @@ https://github.com/acuifex/acuion-personal-configs
 * Hitchance for aimbot and triggerbot
 * Backtrack that doesn't work with aimbot and triggerbot
 * Visual dots for backtrack
+* backtrack chams
 * Dirrection control for AA and LBY (left arrow and right arrow key)
 * Jitter preset for AA that i pasted from somewhere
 * AA yaw offset

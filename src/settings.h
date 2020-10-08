@@ -815,12 +815,16 @@ namespace Settings
 		namespace Chams
 		{
 			inline bool enabled = false;
+			inline bool backtrackEnabled = false;
             inline HealthColorVar allyColor = ImColor(0, 0, 255, 255);
             inline HealthColorVar allyVisibleColor = ImColor(0, 255, 0, 255);
             inline HealthColorVar enemyColor = ImColor(255, 0, 0, 255);
             inline HealthColorVar enemyVisibleColor = ImColor(255, 255, 0, 255);
+            inline HealthColorVar backtrackColor = ImColor(255, 0, 0, 127);
+            inline HealthColorVar backtrackVisibleColor = ImColor(255, 255, 0, 127);
             inline HealthColorVar localplayerColor = ImColor(0, 255, 255, 255);
 			inline ChamsType type = ChamsType::CHAMS;
+			inline ChamsType backtrackType = ChamsType::CHAMS;
 
 			namespace Arms
 			{

@@ -80,6 +80,9 @@ static void DrawPlayer(void* thisptr, void* context, void *state, const ModelRen
 
 		visible_material->ColorModulate(visColor);
 		hidden_material->ColorModulate(color);
+		
+		visible_material->AlphaModulate(Settings::ESP::Chams::allyVisibleColor.Color(entity).Value.w);
+		hidden_material->AlphaModulate(Settings::ESP::Chams::allyColor.Color(entity).Value.w);
 	}
 	else if (!Entity::IsTeamMate(entity, localplayer))
 	{
@@ -88,6 +91,9 @@ static void DrawPlayer(void* thisptr, void* context, void *state, const ModelRen
 
 		visible_material->ColorModulate(visColor);
 		hidden_material->ColorModulate(color);
+		
+		visible_material->AlphaModulate(Settings::ESP::Chams::enemyVisibleColor.Color(entity).Value.w);
+		hidden_material->AlphaModulate(Settings::ESP::Chams::enemyColor.Color(entity).Value.w);
 	}
 	else
 	{
@@ -112,26 +118,60 @@ static void DrawPlayer(void* thisptr, void* context, void *state, const ModelRen
 
 static void DrawRecord(void* thisptr, void* context, void *state, const ModelRenderInfo_t &pInfo, matrix3x4_t* pCustomBoneToWorld)
 {
-	if (!Settings::LagComp::enabled)
+	if (!Settings::LagComp::enabled || !Settings::ESP::Chams::backtrackEnabled)
         return;
 
     C_BasePlayer* localplayer = (C_BasePlayer*) entityList->GetClientEntity(engine->GetLocalPlayer());
 	if (!localplayer)
 		return;
+	
+	C_BasePlayer* entity = (C_BasePlayer*) entityList->GetClientEntity(pInfo.entity_index);
+	if (!entity
+	    || !entity->GetAlive())
+		return;
+		
 	if (LagComp::ticks.empty())
 		return;
-
- 	IMaterial* visible_material = materialChams;
- 	Color visColor = Color(255, 0, 0, 255);
- 	visible_material->ColorModulate(visColor);
- 	visible_material->AlphaModulate(0.2f);
+	
 	auto &tick = LagComp::ticks.back();
 	for (auto &record : tick.records)
 	{
-		if (!record.boneMatrix)
+		if (!record.boneMatrix || entity != record.entity)
 			continue;
-
-		(Vector)pInfo.origin = record.origin;
+		
+		IMaterial* visible_material = nullptr;
+		IMaterial* hidden_material = nullptr;
+		
+		switch (Settings::ESP::Chams::backtrackType)
+		{
+			case ChamsType::CHAMS:
+			case ChamsType::CHAMS_XQZ:
+				visible_material = materialChams;
+				hidden_material = materialChamsIgnorez;
+				break;
+			case ChamsType::CHAMS_FLAT:
+			case ChamsType::CHAMS_FLAT_XQZ:
+				visible_material = materialChamsFlat;
+				hidden_material = materialChamsFlatIgnorez;
+				break;
+		}
+		
+		Color visColor = Color::FromImColor(Settings::ESP::Chams::backtrackVisibleColor.Color(entity));
+		Color color = Color::FromImColor(Settings::ESP::Chams::backtrackColor.Color(entity));
+		
+		visible_material->ColorModulate(visColor);
+		hidden_material->ColorModulate(color);
+		
+		visible_material->AlphaModulate(Settings::ESP::Chams::backtrackVisibleColor.Color(entity).Value.w);
+		hidden_material->AlphaModulate(Settings::ESP::Chams::backtrackColor.Color(entity).Value.w);
+		
+		if (!Settings::ESP::Filters::legit && (Settings::ESP::Chams::backtrackType == ChamsType::CHAMS_XQZ || Settings::ESP::Chams::backtrackType == ChamsType::CHAMS_FLAT_XQZ))
+		{
+			modelRender->ForcedMaterialOverride(hidden_material);
+			modelRenderVMT->GetOriginalMethod<DrawModelExecuteFn>(21)(thisptr, context, state, pInfo, (matrix3x4_t*)record.boneMatrix);
+		}
+		
+		// pInfo.origin = record.origin;
 		modelRender->ForcedMaterialOverride(visible_material);
 		modelRenderVMT->GetOriginalMethod<DrawModelExecuteFn>(21)(thisptr, context, state, pInfo, (matrix3x4_t*)record.boneMatrix);
 	}
@@ -202,6 +242,7 @@ void Chams::DrawModelExecute(void* thisptr, void* context, void *state, const Mo
 
 	if (strstr(modelName, XORSTR("models/player")))
 	{
+		DrawRecord(thisptr, context, state, pInfo, pCustomBoneToWorld);
 		DrawPlayer(thisptr, context, state, pInfo, pCustomBoneToWorld);
 	}
 	else if (strstr(modelName, XORSTR("arms")))

@@ -40,11 +40,14 @@ void Resolver::FrameStageNotify(ClientFrameStage_t stage)
 				continue;
 
 			player_data.push_back(std::pair<C_BasePlayer*, QAngle>(player, *player->GetEyeAngles()));
-
+			float maxdelta = AntiAim::GetMaxDelta(player->GetAnimState());
+			float resolved_feet = (rand() % 2) ?
+				                  player->GetEyeAngles()->y + maxdelta :
+				                  player->GetEyeAngles()->y - maxdelta;
 			//player->GetEyeAngles()->y = *player->GetLowerBodyYawTarget();
-			player->GetEyeAngles()->y = (rand() % 2) ?
-                                        player->GetEyeAngles()->y + (AntiAim::GetMaxDelta(player->GetAnimState()) * 0.66f) :
-                                        player->GetEyeAngles()->y - (AntiAim::GetMaxDelta(player->GetAnimState()) * 0.66f);
+			// not really the best way but should do it's job until i make a better resolver.
+			player->GetAnimState()->goalFeetYaw = resolved_feet;
+			player->GetAnimState()->currentFeetYaw = resolved_feet;
 		}
 	}
 	else if (stage == ClientFrameStage_t::FRAME_RENDER_END)

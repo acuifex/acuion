@@ -150,6 +150,7 @@ void Visuals::RenderTab()
 					ImGui::Checkbox(XORSTR("Outline Box"), &Settings::ESP::Boxes::enabled);
 					ImGui::Checkbox(XORSTR("Sprite ESP"), &Settings::ESP::Sprite::enabled);
 					ImGui::Checkbox(XORSTR("Chams"), &Settings::ESP::Chams::enabled);
+					ImGui::Checkbox(XORSTR("Backtrack Chams"), &Settings::ESP::Chams::backtrackEnabled);
 					ImGui::Checkbox(XORSTR("Health"), &Settings::ESP::Bars::enabled);
 					ImGui::ItemSize(ImVec2(0.0f, 0.0f), 0.0f);
 					ImGui::Text(XORSTR("Bar Color"));
@@ -167,6 +168,7 @@ void Visuals::RenderTab()
 					ImGui::Combo(XORSTR("##BOXTYPE"), (int*)& Settings::ESP::Boxes::type, BoxTypes, IM_ARRAYSIZE(BoxTypes));
 					ImGui::Combo(XORSTR("##SPRITETYPE"), (int*)& Settings::ESP::Sprite::type, SpriteTypes, IM_ARRAYSIZE(SpriteTypes));
 					ImGui::Combo(XORSTR("##CHAMSTYPE"), (int*)& Settings::ESP::Chams::type, ChamsTypes, IM_ARRAYSIZE(ChamsTypes));
+					ImGui::Combo(XORSTR("##BACTRACKCHAMSTYPE"), (int*)& Settings::ESP::Chams::backtrackType, ChamsTypes, IM_ARRAYSIZE(ChamsTypes));
 					ImGui::Combo(XORSTR("##BARTYPE"), (int*)& Settings::ESP::Bars::type, BarTypes, IM_ARRAYSIZE(BarTypes));
 					ImGui::Combo(XORSTR("##BARCOLTYPE"), (int*)& Settings::ESP::Bars::colorType, BarColorTypes, IM_ARRAYSIZE(BarColorTypes));
 					ImGui::Combo(XORSTR("##TEAMCOLTYPE"), (int*)& Settings::ESP::teamColorType, TeamColorTypes, IM_ARRAYSIZE(TeamColorTypes));
