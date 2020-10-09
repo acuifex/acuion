@@ -16,7 +16,7 @@ https://github.com/acuifex/acuion-personal-configs
 * Some yaw indicators in third person
 * AA yaw follow setting
 * Offset yaw by desync value in percents
-* Skateboarding!
+* [Skateboarding](https://youtu.be/MoNwuuIXmZI)
 * Show votes [#12](../../issues/12)
 * Skins updated [#12](../../issues/12)
 * Profile changer (only shows in game for me) [#16](../../issues/16)
