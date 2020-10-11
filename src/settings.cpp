@@ -1196,7 +1196,7 @@ void Settings::LoadConfig(std::string path)
 	GetButtonCode(settings[XORSTR("JumpThrow")][XORSTR("key")], &Settings::JumpThrow::key);
 
 	GetVal(settings[XORSTR("DisablePostProcessing")][XORSTR("enabled")], &Settings::DisablePostProcessing::enabled);
-
+	GetVal(settings[XORSTR("Skateboarding")][XORSTR("enabled")], &Settings::Skateboarding::enabled);
 	GetVal(settings[XORSTR("NoFall")][XORSTR("enabled")], &Settings::NoFall::enabled);
 
 	GetVal(settings[XORSTR("GrenadeHelper")][XORSTR("enabled")], &Settings::GrenadeHelper::enabled);
