@@ -625,7 +625,7 @@ void Settings::LoadDefaultsOrSave(std::string path)
 	settings[XORSTR("ThirdPerson")][XORSTR("enabled")] = Settings::ThirdPerson::enabled;
 	settings[XORSTR("ThirdPerson")][XORSTR("distance")] = Settings::ThirdPerson::distance;
 	settings[XORSTR("ThirdPerson")][XORSTR("type")] = (int) Settings::ThirdPerson::type;
-	settings[XORSTR("ThirdPerson")][XORSTR("key")] = Settings::ThirdPerson::key;
+	settings[XORSTR("ThirdPerson")][XORSTR("key")] = Util::GetButtonName(Settings::ThirdPerson::key);
 
 	settings[XORSTR("JumpThrow")][XORSTR("enabled")] = Settings::JumpThrow::enabled;
 	settings[XORSTR("JumpThrow")][XORSTR("key")] = Util::GetButtonName(Settings::JumpThrow::key);
@@ -755,8 +755,10 @@ void Settings::LoadConfig(std::string path)
 	GetVal(settings[XORSTR("AntiAim")][XORSTR("AutoDisable")][XORSTR("knife_held")], &Settings::AntiAim::AutoDisable::knifeHeld);
 	GetVal(settings[XORSTR("AntiAim")][XORSTR("Preset")][XORSTR("type")], (int*)&Settings::AntiAim::Preset::type);
 	GetVal(settings[XORSTR("AntiAim")][XORSTR("Yaw")][XORSTR("enabled")], &Settings::AntiAim::Yaw::enabled);
+	GetVal(settings[XORSTR("AntiAim")][XORSTR("Yaw")][XORSTR("addDesyncEnabled")], &Settings::AntiAim::Yaw::addDesyncEnabled);
+	GetVal(settings[XORSTR("AntiAim")][XORSTR("Yaw")][XORSTR("addDesyncoffset")], &Settings::AntiAim::Yaw::addDesyncOffset);
 	GetVal(settings[XORSTR("AntiAim")][XORSTR("Yaw")][XORSTR("type")], (int*)&Settings::AntiAim::Yaw::type);
-	GetVal(settings[XORSTR("AntiAim")][XORSTR("Yaw")][XORSTR("offset")], (int*)&Settings::AntiAim::Yaw::offset);
+	GetVal(settings[XORSTR("AntiAim")][XORSTR("Yaw")][XORSTR("offset")], &Settings::AntiAim::Yaw::offset);
 	GetVal(settings[XORSTR("AntiAim")][XORSTR("Fake")][XORSTR("enabled")], &Settings::AntiAim::Fake::enabled);
 	GetVal(settings[XORSTR("AntiAim")][XORSTR("Fake")][XORSTR("type")], (int*)&Settings::AntiAim::Fake::type);
 	GetVal(settings[XORSTR("AntiAim")][XORSTR("RageDesyncFix")][XORSTR("enabled")], &Settings::AntiAim::RageDesyncFix::enabled);
@@ -1191,6 +1193,7 @@ void Settings::LoadConfig(std::string path)
 	GetVal(settings[XORSTR("ThirdPerson")][XORSTR("enabled")], &Settings::ThirdPerson::enabled);
 	GetVal(settings[XORSTR("ThirdPerson")][XORSTR("distance")], &Settings::ThirdPerson::distance);
 	GetVal(settings[XORSTR("ThirdPerson")][XORSTR("type")], (int*)&Settings::ThirdPerson::type);
+	GetButtonCode(settings[XORSTR("ThirdPerson")][XORSTR("key")], &Settings::ThirdPerson::key);
 
 	GetVal(settings[XORSTR("JumpThrow")][XORSTR("enabled")], &Settings::JumpThrow::enabled);
 	GetButtonCode(settings[XORSTR("JumpThrow")][XORSTR("key")], &Settings::JumpThrow::key);

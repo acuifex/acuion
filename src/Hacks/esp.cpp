@@ -1679,7 +1679,7 @@ void ESP::Paint()
 				DrawDZItems(entity, localplayer);
 		}
 	}
-	if (Settings::ThirdPerson::toggled)
+	if (Settings::ThirdPerson::enabled && Settings::ThirdPerson::toggled)
 		DrawAATrace(fake, actual, localplayer);
 	if (Settings::ESP::FOVCrosshair::enabled)
 		DrawFOVCrosshair();
