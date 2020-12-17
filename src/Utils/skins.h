@@ -954,6 +954,26 @@ const std::map<int, PaintNames_t> itemSkins = {
         {972, { "#PaintKit_gs_galil_phoenix_Tag", "galil_phoenid"} },
         {973, { "#PaintKit_gs_bizon_hellraider_Tag", "bizon_hellraider"} },
         {974, { "#PaintKit_gs_mp5sd_wasteland_legacy_Tag", "mp5sd_wasteland"} },
+	
+			/*Broken Fang*/
+
+		{975, {"#PaintKit_gs_awp_exoskeleton_Tag", "awp_exoskeleton"} },
+		{976, {"#PaintKit_gs_cz75_vendetta_Tag","gs_cz75_vendetta"} },
+		{977, {"#PaintKit_hy_p90_dino_rampage_Tag","hy_p90_dino_rampage"} },
+		{978, {"#PaintKit_gs_dual_elites_dezastre_Tag","gs_dual_elites_dezastre"} },
+		{979, {"#PaintKit_cu_five_seven_diary_Tag","cu_five_seven_diary"} },
+		{980, {"#PaintKit_gs_g3sg1_disrupt_Tag","gs_g3sg1_disrupt"} },
+		{981, {"#PaintKit_gs_galil_vandal_Tag","gs_galil_vandal"} },
+		{982, {"#PaintKit_cu_p250_infect_Tag","cu_p250_infect"} },
+		{983, {"#PaintKit_cu_m249_deep_relief_Tag","cu_m249_deep_relief"} },
+		{984, {"#PaintKit_cu_m4a1s_printstream_Tag","cu_m4a1s_printstream"} },
+		{985, {"#PaintKit_cu_m4a4_cyberpunk_Tag","cu_m4a4_cyberpunk"} },
+		{986, {"#PaintKit_gs_mp5_conditionzero_Tag","gs_mp5_conditionzero"} },
+		{987, {"#PaintKit_cu_nova_polymer_Tag","cu_nova_polymer"} },
+		{988, {"#PaintKit_cu_glock_noir_Tag","cu_glock_noir"} },
+		{989, {"#PaintKit_cu_ssg08_chromatic_Tag","cu_ssg08_chromatic"} },
+		{990, {"#PaintKit_gs_ump_gold_bismuth_Tag","gs_ump_gold_bismuth"} },
+		{991, {"#PaintKit_cu_usp_krokos_Tag","cu_usp_krokos"} },
 
         
         
