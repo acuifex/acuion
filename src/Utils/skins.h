@@ -954,8 +954,8 @@ const std::map<int, PaintNames_t> itemSkins = {
         {972, { "#PaintKit_gs_galil_phoenix_Tag", "galil_phoenid"} },
         {973, { "#PaintKit_gs_bizon_hellraider_Tag", "bizon_hellraider"} },
         {974, { "#PaintKit_gs_mp5sd_wasteland_legacy_Tag", "mp5sd_wasteland"} },
-	
-			/*Broken Fang*/
+
+		/*Broken Fang*/
 
 		{975, {"#PaintKit_gs_awp_exoskeleton_Tag", "awp_exoskeleton"} },
 		{976, {"#PaintKit_gs_cz75_vendetta_Tag","gs_cz75_vendetta"} },
@@ -975,7 +975,7 @@ const std::map<int, PaintNames_t> itemSkins = {
 		{990, {"#PaintKit_gs_ump_gold_bismuth_Tag","gs_ump_gold_bismuth"} },
 		{991, {"#PaintKit_cu_usp_krokos_Tag","cu_usp_krokos"} },
 
-        
+
         
 		/* Gloves */
 		{ 10006, { "#PaintKit_bloodhound_black_silver_tag", "bloodhound_black_silver" } },
@@ -1026,6 +1026,10 @@ const std::map<int, PaintNames_t> itemSkins = {
 		{ 10062, { "#PaintKit_specialist_forest_brown_tag", "specialist_forest_brown" } },
 		{ 10063, { "#PaintKit_specialist_fade_tag", "specialist_fade" } },
 		{ 10064, { "#PaintKit_specialist_winterhex_tag", "specialist_winterhex" } },
+		{ 10085, { "#PaintKit_operation10_metalic_green_tag", "operation10_metalic_green" } },
+		{ 10086, { "#PaintKit_operation10_poison_frog_black_yellow_tag", "operation10_poison_frog_black_yellow" } },
+		{ 10087, { "#PaintKit_operation10_floral_tag", "operation10_floral" } },
+		{ 10088, { "#PaintKit_operation10_snakeskin_black_tag", "operation10_snakeskin_black" } },
 
 };
 
