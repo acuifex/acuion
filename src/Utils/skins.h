@@ -955,7 +955,30 @@ const std::map<int, PaintNames_t> itemSkins = {
         {973, { "#PaintKit_gs_bizon_hellraider_Tag", "bizon_hellraider"} },
         {974, { "#PaintKit_gs_mp5sd_wasteland_legacy_Tag", "mp5sd_wasteland"} },
 
-        
+		/*Broken Fang*/
+
+		{975, {"#PaintKit_gs_awp_exoskeleton_Tag", "awp_exoskeleton"} },
+		{976, {"#PaintKit_gs_cz75_vendetta_Tag","gs_cz75_vendetta"} },
+		{977, {"#PaintKit_hy_p90_dino_rampage_Tag","hy_p90_dino_rampage"} },
+		{978, {"#PaintKit_gs_dual_elites_dezastre_Tag","gs_dual_elites_dezastre"} },
+		{979, {"#PaintKit_cu_five_seven_diary_Tag","cu_five_seven_diary"} },
+		{980, {"#PaintKit_gs_g3sg1_disrupt_Tag","gs_g3sg1_disrupt"} },
+		{981, {"#PaintKit_gs_galil_vandal_Tag","gs_galil_vandal"} },
+		{982, {"#PaintKit_cu_p250_infect_Tag","cu_p250_infect"} },
+		{983, {"#PaintKit_cu_m249_deep_relief_Tag","cu_m249_deep_relief"} },
+		{984, {"#PaintKit_cu_m4a1s_printstream_Tag","cu_m4a1s_printstream"} },
+		{985, {"#PaintKit_cu_m4a4_cyberpunk_Tag","cu_m4a4_cyberpunk"} },
+		{986, {"#PaintKit_gs_mp5_conditionzero_Tag","gs_mp5_conditionzero"} },
+		{987, {"#PaintKit_cu_nova_polymer_Tag","cu_nova_polymer"} },
+		{988, {"#PaintKit_cu_glock_noir_Tag","cu_glock_noir"} },
+		{989, {"#PaintKit_cu_ssg08_chromatic_Tag","cu_ssg08_chromatic"} },
+		{990, {"#PaintKit_gs_ump_gold_bismuth_Tag","gs_ump_gold_bismuth"} },
+		{991, {"#PaintKit_cu_usp_krokos_Tag","cu_usp_krokos"} },
+
+		//Ancient collection
+		{1001, {"#PaintKit_cu_m4a1_snake_Tag", "cu_m4a1_snake"} },
+
+
         
 		/* Gloves */
 		{ 10006, { "#PaintKit_bloodhound_black_silver_tag", "bloodhound_black_silver" } },
@@ -1006,6 +1029,31 @@ const std::map<int, PaintNames_t> itemSkins = {
 		{ 10062, { "#PaintKit_specialist_forest_brown_tag", "specialist_forest_brown" } },
 		{ 10063, { "#PaintKit_specialist_fade_tag", "specialist_fade" } },
 		{ 10064, { "#PaintKit_specialist_winterhex_tag", "specialist_winterhex" } },
+		{ 10065, { "#PaintKit_specialist_marble_fade_tag", "specialist_marble_fade" } },
+		{ 10066, { "#PaintKit_specialist_ricksaw_camo_tag", "specialist_ricksaw_camo" } },
+		{ 10066, { "#PaintKit_specialist_tiger_orange_tag", "specialist_tiger_orange" } },
+		{ 10068, { "#PaintKit_specialist_fbi_tag", "specialist_fbi" } },
+		{ 10069, { "#PaintKit_slick_rezan_tag", "slick_rezan" } },
+		{ 10069, { "#PaintKit_slick_jaguar_white_tag", "slick_jaguar_white" } },
+		{ 10071, { "#PaintKit_slick_jaguar_yellow_tag", "slick_jaguar_yellow" } },
+		{ 10072, { "#PaintKit_slick_stitched_black_white_tag", "slick_stitched_black_white" } },
+		{ 10073, { "#PaintKit_sporty_slingshot_tag", "sporty_slingshot" } },
+		{ 10074, { "#PaintKit_sporty_hunter_tag", "sporty_hunter" } },
+		{ 10075, { "#PaintKit_sporty_houndstooth_red_tag", "sporty_houndstooth_red" } },
+		{ 10076, { "#PaintKit_sporty_jaguar_tag", "sporty_jaguar" } },
+		{ 10077, { "#PaintKit_motorcycle_checker_flag_blue_green_tag", "motorcycle_checker_flag_blue_green" } },
+		{ 10078, { "#PaintKit_motorcycle_smoke_tag", "motorcycle_smoke" } },
+		{ 10079, { "#PaintKit_motorcycle_carbonfiber_red_tag", "motorcycle_carbonfiber_red" } },
+		{ 10080, { "#PaintKit_motorcycle_commando_ksk_tag", "motorcycle_commando_ksk" } },
+		{ 10081, { "#PaintKit_handwrap_fabric_houndstooth_orange_tag", "handwrap_fabric_houndstooth_orange" } },
+		{ 10082, { "#PaintKit_handwrap_leathery_fabric_giraffe_tag", "handwrap_leathery_fabric_giraffe" } },
+		{ 10083, { "PaintKit_handwrap_leathery_snakeskin_orange_tag", "handwrap_leathery_snakeskin_orange" } },
+		{ 10084, { "#PaintKit_handwrap_leathery_caution_tag", "handwrap_leathery_caution" } },
+		{ 10085, { "#PaintKit_operation10_metalic_green_tag", "operation10_metalic_green" } },
+		{ 10086, { "#PaintKit_operation10_poison_frog_black_yellow_tag", "operation10_poison_frog_black_yellow" } },
+		{ 10087, { "#PaintKit_operation10_floral_tag", "operation10_floral" } },
+		{ 10088, { "#PaintKit_operation10_snakeskin_black_tag", "operation10_snakeskin_black" } },
+
 
 };
 
