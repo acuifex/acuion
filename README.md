@@ -2,17 +2,17 @@
 ### I use this fork for educational purposes so most of the stuff might be fucked !
 ## What I did / plan on doing :
 
--Added all the new Broken Fang skins from case and collections (mostly..)
--Add Hydra / Broken fang model gloves (shouldn't be hard ffs)
--Clean src ? myb idk
--Help @acuifex w TODO list (if i have the braincells needed)
+* Added all the new Broken Fang skins from case and collections (Soon to be done)
+* Added Hydra / Broken fang model gloves !
+* Clean src ? *myb idk*
+* Help @acuifex w TODO list (*if i have the braincells needed*)
 
-I will post my config's too !
-
-
+I will post my config's too ! (soon)
 
 
-###Original acuion README: (All creds go to acuifex , Fuzion team , Aimtux team)
+
+
+### Original acuion README: (All creds go to acuifex , Fuzion team , Aimtux team)
 
 Here are some of my configs that i use: </br>
 https://github.com/acuifex/acuion-personal-configs 
