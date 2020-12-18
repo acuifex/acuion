@@ -975,6 +975,9 @@ const std::map<int, PaintNames_t> itemSkins = {
 		{990, {"#PaintKit_gs_ump_gold_bismuth_Tag","gs_ump_gold_bismuth"} },
 		{991, {"#PaintKit_cu_usp_krokos_Tag","cu_usp_krokos"} },
 
+		//Ancient collection
+		{1001, {"#PaintKit_cu_m4a1_snake_Tag", "cu_m4a1_snake"} },
+
 
         
 		/* Gloves */
@@ -1026,10 +1029,31 @@ const std::map<int, PaintNames_t> itemSkins = {
 		{ 10062, { "#PaintKit_specialist_forest_brown_tag", "specialist_forest_brown" } },
 		{ 10063, { "#PaintKit_specialist_fade_tag", "specialist_fade" } },
 		{ 10064, { "#PaintKit_specialist_winterhex_tag", "specialist_winterhex" } },
+		{ 10065, { "#PaintKit_specialist_marble_fade_tag", "specialist_marble_fade" } },
+		{ 10066, { "#PaintKit_specialist_ricksaw_camo_tag", "specialist_ricksaw_camo" } },
+		{ 10066, { "#PaintKit_specialist_tiger_orange_tag", "specialist_tiger_orange" } },
+		{ 10068, { "#PaintKit_specialist_fbi_tag", "specialist_fbi" } },
+		{ 10069, { "#PaintKit_slick_rezan_tag", "slick_rezan" } },
+		{ 10069, { "#PaintKit_slick_jaguar_white_tag", "slick_jaguar_white" } },
+		{ 10071, { "#PaintKit_slick_jaguar_yellow_tag", "slick_jaguar_yellow" } },
+		{ 10072, { "#PaintKit_slick_stitched_black_white_tag", "slick_stitched_black_white" } },
+		{ 10073, { "#PaintKit_sporty_slingshot_tag", "sporty_slingshot" } },
+		{ 10074, { "#PaintKit_sporty_hunter_tag", "sporty_hunter" } },
+		{ 10075, { "#PaintKit_sporty_houndstooth_red_tag", "sporty_houndstooth_red" } },
+		{ 10076, { "#PaintKit_sporty_jaguar_tag", "sporty_jaguar" } },
+		{ 10077, { "#PaintKit_motorcycle_checker_flag_blue_green_tag", "motorcycle_checker_flag_blue_green" } },
+		{ 10078, { "#PaintKit_motorcycle_smoke_tag", "motorcycle_smoke" } },
+		{ 10079, { "#PaintKit_motorcycle_carbonfiber_red_tag", "motorcycle_carbonfiber_red" } },
+		{ 10080, { "#PaintKit_motorcycle_commando_ksk_tag", "motorcycle_commando_ksk" } },
+		{ 10081, { "#PaintKit_handwrap_fabric_houndstooth_orange_tag", "handwrap_fabric_houndstooth_orange" } },
+		{ 10082, { "#PaintKit_handwrap_leathery_fabric_giraffe_tag", "handwrap_leathery_fabric_giraffe" } },
+		{ 10083, { "PaintKit_handwrap_leathery_snakeskin_orange_tag", "handwrap_leathery_snakeskin_orange" } },
+		{ 10084, { "#PaintKit_handwrap_leathery_caution_tag", "handwrap_leathery_caution" } },
 		{ 10085, { "#PaintKit_operation10_metalic_green_tag", "operation10_metalic_green" } },
 		{ 10086, { "#PaintKit_operation10_poison_frog_black_yellow_tag", "operation10_poison_frog_black_yellow" } },
 		{ 10087, { "#PaintKit_operation10_floral_tag", "operation10_floral" } },
 		{ 10088, { "#PaintKit_operation10_snakeskin_black_tag", "operation10_snakeskin_black" } },
+
 
 };
 
