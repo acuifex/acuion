@@ -1279,6 +1279,11 @@ namespace Settings
 		inline ButtonCode_t key = ButtonCode_t::KEY_T;
 	}
 
+	namespace DoorSpam
+	{
+		extern bool enabled;
+	}
+
 	namespace ProfileChanger
 	{
 		inline int coinID = 890;

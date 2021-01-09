@@ -14,6 +14,7 @@
 #include "../Hacks/edgejump.h"
 #include "../Hacks/autoblock.h"
 #include "../Hacks/fakeduck.h"
+#include "../Hacks/doorspam.h"
 #include "../Hacks/predictionsystem.h"
 #include "../Hacks/aimbot.h"
 #include "../Hacks/triggerbot.h"
@@ -51,6 +52,7 @@ bool Hooks::CreateMove(void* thisptr, float flInputSampleTime, CUserCmd* cmd)
 		ShowRanks::CreateMove(cmd);
 		AutoDefuse::CreateMove(cmd);
 		JumpThrow::CreateMove(cmd);
+		DoorSpam::CreateMove(cmd);
 		GrenadeHelper::CreateMove(cmd);
         GrenadePrediction::CreateMove( cmd );
         EdgeJump::PrePredictionCreateMove(cmd);
