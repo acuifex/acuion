@@ -523,6 +523,7 @@ void Misc::RenderTab()
 				ImGui::Checkbox(XORSTR("BackTrack"), &Settings::LagComp::enabled);
 				ImGui::Checkbox(XORSTR("Disable post-processing"), &Settings::DisablePostProcessing::enabled);
 				ImGui::Checkbox(XORSTR("No Duck Cooldown"), &Settings::NoDuckCooldown::enabled);
+				ImGui::Checkbox(XORSTR("Fake Duck"), &Settings::FakeDuck::enabled);
                 ImGui::Checkbox(XORSTR("Skateboarding"), &Settings::Skateboarding::enabled);
 			}
 			ImGui::NextColumn();
@@ -536,6 +537,7 @@ void Misc::RenderTab()
 				UI::KeyBindButton(&Settings::Airstuck::key);
 				UI::KeyBindButton(&Settings::Autoblock::key);
 				UI::KeyBindButton(&Settings::JumpThrow::key);
+				UI::KeyBindButton(&Settings::FakeDuck::key);
 				ImGui::Checkbox(XORSTR("Silent Defuse"), &Settings::AutoDefuse::silent);
 				ImGui::Checkbox(XORSTR("Attempt NoFall"), &Settings::NoFall::enabled);
 				ImGui::SliderFloat(XORSTR("##BTWINDOW"), &Settings::LagComp::window, 0.f, 200.f, XORSTR("ms: %0.f"));
