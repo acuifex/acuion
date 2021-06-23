@@ -291,16 +291,17 @@ void Chams::CreateMove(CUserCmd* cmd){
 
 void Chams::FrameStageNotify(ClientFrameStage_t stage) // blatant c+p https://www.unknowncheats.me/forum/counterstrike-global-offensive/353751-proper-desync-chams.html
 {
-    // return;
+    return;
+    
     if (stage != ClientFrameStage_t::FRAME_RENDER_START)
-	return;
+		return;
 
     if (!engine->IsInGame())
-	return;
+		return;
 
     C_BasePlayer* localplayer = (C_BasePlayer*)entityList->GetClientEntity(engine->GetLocalPlayer());
     if (!localplayer || !localplayer->GetAlive())
-	return;
+		return;
 
     static CBaseHandle* handle = localplayer->GetRefEHandle();
     static float spawntime = localplayer->GetSpawnTime();
@@ -312,65 +313,63 @@ void Chams::FrameStageNotify(ClientFrameStage_t stage) // blatant c+p https://ww
 
     if (change)
     {
-	free(fake_anim_state);
-	fake_anim_state = nullptr;
+		free(fake_anim_state);
+		fake_anim_state = nullptr;
     }
 
     if (reset)
     {
-	AnimStateReset(fake_anim_state);
-
-	spawntime = localplayer->GetSpawnTime();
+		AnimStateReset(fake_anim_state);
+		spawntime = localplayer->GetSpawnTime();
     }
 
     if (allocate || change)
     {
-	fake_anim_state = CreateAnimState(localplayer);
-
-	handle = localplayer->GetRefEHandle();
-	spawntime = localplayer->GetSpawnTime();
+		fake_anim_state = CreateAnimState(localplayer);
+		handle = localplayer->GetRefEHandle();
+		spawntime = localplayer->GetSpawnTime();
     }
     else if (localplayer->GetSimulationTime() != localplayer->GetOldSimulationTime())
     {
-	std::array<AnimationLayer, 15> networked_layers;
-	std::copy_n(localplayer->GetAnimOverlay()->m_Memory.m_pMemory, 15, networked_layers.begin());
+		std::array<AnimationLayer, 15> networked_layers;
+		std::copy_n(localplayer->GetAnimOverlay()->m_Memory.m_pMemory, 15, networked_layers.begin());
 
-	QAngle backup_abs_angles = localplayer->GetAbsAngles();
+		QAngle backup_abs_angles = localplayer->GetAbsAngles();
 
-	float backup_poses[24];
-	// std::copy(localplayer->GetPoseParameters(), localplayer->GetPoseParameters() + 24, backup_poses);
+		float backup_poses[24];
+		// std::copy(localplayer->GetPoseParameters(), localplayer->GetPoseParameters() + 24, backup_poses);
         for ( int i=0;i<24;i++ )
         {
             backup_poses[i] = localplayer->GetPoseParameters()[i];
         }
 
-	AnimStateUpdate(fake_anim_state, 0.0f, 1.0f, false);
-	localplayer->InvalidateBoneCache();
-	// localplayer->SetupBones(fake_matrix, 128, 0x7FF00, globalVars->curtime);
+		AnimStateUpdate(fake_anim_state, 0.0f, 1.0f, false);
+		localplayer->InvalidateBoneCache();
+		localplayer->SetupBones(fake_matrix, 128, 0x7FF00, globalVars->curtime);
 
-	std::copy(networked_layers.begin(), networked_layers.end(), localplayer->GetAnimOverlay()->m_Memory.m_pMemory);
-	// std::copy(backup_poses, backup_poses + 24, localplayer->GetPoseParameters());
+		std::copy(networked_layers.begin(), networked_layers.end(), localplayer->GetAnimOverlay()->m_Memory.m_pMemory);
+		// std::copy(backup_poses, backup_poses + 24, localplayer->GetPoseParameters());
 
         for ( int i=0;i<24;i++ )
         {
             localplayer->GetPoseParameters()[i] = backup_poses[i];
         }
 
-	QAngle& fuck = const_cast<QAngle&>(localplayer->GetAbsAngles());
-	fuck = backup_abs_angles;
+		QAngle& fuck = const_cast<QAngle&>(localplayer->GetAbsAngles());
+		fuck = backup_abs_angles;
 
-	if (localplayer->GetAbsAngles() != backup_abs_angles)
-	    cvar->ConsoleColorPrintf(ColorRGBA(0, 225, 0), XORSTR("abs angles are different!\n"));
+		if (localplayer->GetAbsAngles() != backup_abs_angles)
+		    cvar->ConsoleColorPrintf(ColorRGBA(0, 225, 0), XORSTR("abs angles are different!\n"));
 
-	if (std::equal(networked_layers.begin(), networked_layers.end(), localplayer->GetAnimOverlay()->m_Memory.m_pMemory))
-	    cvar->ConsoleColorPrintf(ColorRGBA(0, 225, 0), XORSTR("networked layers are different! (animoverlay size is %d btw)\n"), localplayer->GetAnimOverlay()->Count());
+		if (std::equal(networked_layers.begin(), networked_layers.end(), localplayer->GetAnimOverlay()->m_Memory.m_pMemory))
+		    cvar->ConsoleColorPrintf(ColorRGBA(0, 225, 0), XORSTR("networked layers are different! (animoverlay size is %d btw)\n"), localplayer->GetAnimOverlay()->Count());
 
         for ( int i=0;i<24;i++ )
         {
-	    if(localplayer->GetPoseParameters()[i] != backup_poses[i])
-                cvar->ConsoleColorPrintf(ColorRGBA(0, 225, 0), XORSTR("poses are different! index: %d was: %f now: %f\n"), i, backup_poses[i], localplayer->GetPoseParameters()[i]);
+	    	if(localplayer->GetPoseParameters()[i] != backup_poses[i])
+        		cvar->ConsoleColorPrintf(ColorRGBA(0, 225, 0), XORSTR("poses are different! index: %d was: %f now: %f\n"), i, backup_poses[i], localplayer->GetPoseParameters()[i]);
         }
-        // if (std::equal(std::begin(backup_poses), std::end(backup_poses), localplayer->GetPoseParameters()))
-	//     cvar->ConsoleColorPrintf(ColorRGBA(0, 225, 0), XORSTR("poses are different!\n"));
-    }
+	        // if (std::equal(std::begin(backup_poses), std::end(backup_poses), localplayer->GetPoseParameters()))
+		//     cvar->ConsoleColorPrintf(ColorRGBA(0, 225, 0), XORSTR("poses are different!\n"));
+	    }
 }
