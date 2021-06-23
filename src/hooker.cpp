@@ -10,6 +10,7 @@
 
 
 int* nPredictionRandomSeed = nullptr;
+unsigned long* g_iModelBoneCounter = nullptr;
 CMoveData* g_MoveData = nullptr;
 bool* s_bOverridePostProcessingDisable = nullptr;
 ConVar *cl_csm_enabled = nullptr;
@@ -30,6 +31,7 @@ VMT* uiEngineVMT = nullptr;
 
 MsgFunc_ServerRankRevealAllFn MsgFunc_ServerRankRevealAll;
 SendClanTagFn SendClanTag;
+HostDisconnectFn Host_Disconnect;
 SetLocalPlayerReadyFn SetLocalPlayerReady;
 
 RecvVarProxyFn fnSequenceProxyFn;
@@ -49,6 +51,10 @@ unsigned int Offsets::playerAnimStateOffset = 0;
 unsigned int Offsets::playerAnimOverlayOffset = 0;
 
 GetSequenceActivityFn GetSeqActivity;
+
+CreateAnimStateFn CreateAnimState;
+AnimStateUpdateFn AnimStateUpdate;
+AnimStateResetFn AnimStateReset;
 
 uintptr_t SetAbsOriginFnAddr;
 
@@ -210,6 +216,40 @@ void Hooker::FindSendClanTag()
 	SendClanTag = reinterpret_cast<SendClanTagFn>(func_address);
 }
 
+
+void Hooker::FindHostDisconnect()
+{
+	//  xref cs_game_disconnected
+	//   0059a510      48 8b 05        MOV        RAX,qword ptr [PTR_PTR_DAT_00ed2140]             = 00e2a460
+	//                  29 7c 93 00
+	//    0059a517      55              PUSH       RBP
+	//    0059a518      31 c9           XOR        ECX,ECX
+	//    0059a51a      48 8d 35        LEA        RSI,[s_cs_game_disconnected_00a26ec6]            = "cs_game_disconnected"
+	//                  a5 c9 48 00
+	//    0059a521      48 89 e5        MOV        RBP,RSP
+	//    0059a524      41 54           PUSH       R12
+	//    0059a526      53              PUSH       RBX
+	//    0059a527      31 d2           XOR        EDX,EDX
+	//    0059a529      89 fb           MOV        EBX,bShowMainMenu
+	//    0059a52b      4c 8b 20        MOV        R12,qword ptr [RAX]=>PTR_DAT_00e2a460            = 010d0e00
+	//    0059a52e      49 8b 04 24     MOV        RAX,qword ptr [R12]=>DAT_010d0e00                = ??
+	//    0059a532      4c 89 e7        MOV        bShowMainMenu,R12
+	//                              LAB_0059a535                                    XREF[1]:     00c0a1ed(*)
+	//    0059a535      ff 50 40        CALL       qword ptr [RAX + 0x40]
+	//    0059a538      48 85 c0        TEST       RAX,RAX
+	//    0059a53b      74 0d           JZ         LAB_0059a54a
+	//    0059a53d      49 8b 14 24     MOV        RDX,qword ptr [R12]=>DAT_010d0e00                = ??
+	//    0059a541      48 89 c6        MOV        RSI,RAX
+	//    0059a544      4c 89 e7        MOV        bShowMainMenu,R12
+	//    0059a547      ff 52 50        CALL       qword ptr [RDX + 0x50]
+	
+	uintptr_t func_address = PatternFinder::FindPatternInModule(XORSTR("engine_client.so"),
+	                                                            (unsigned char*) XORSTR("\x48\x8b\x05\x00\x00\x00\x00\x55\x31\xc9\x48\x8d\x35\x00\x00\x00\x00\x48\x89\xe5\x41\x54\x53\x31\xd2\x89\xfb\x4c\x8b\x20\x49\x8b\x04\x24\x4c\x89\xe7\xff\x50\x00\x48\x85\xc0\x74\x00\x49\x8b\x14\x24\x48\x89\xc6\x4c\x89\xe7\xff\x52\x00"),
+	                                                            XORSTR("xxx????xxxxxx????xxxxxxxxxxxxxxxxxxxxxx?xxxx?xxxxxxxxxxxx?" ));
+	
+	Host_Disconnect = reinterpret_cast<HostDisconnectFn>(func_address);
+}
+
 void Hooker::FindViewRender()
 {
 	// 48 8D 3D ?? ?? ?? ?? 48 8B 10 48 89 08 48 8D 05 ?? ?? ?? ?? 48 89 05 ?? ?? ?? ?? 48 89 15 ?? ?? ?? ?? E8 ?? ?? ?? ?? F3
@@ -338,7 +378,6 @@ void Hooker::FindVstdlibFunctions()
 
 	dlclose(handle);
 }
- 
 
 void Hooker::FindOverridePostProcessingDisable()
 {
@@ -352,6 +391,22 @@ void Hooker::FindOverridePostProcessingDisable()
 	bool_address = GetAbsoluteAddress(bool_address, 2, 7);
 
 	s_bOverridePostProcessingDisable = reinterpret_cast<bool*>(bool_address);
+}
+
+void Hooker::FindModelBoneCounter()
+{
+	//                             LAB_008eec70                                    XREF[1]:     008ee6d7(j)
+	//    008eec70      48 8b 05        MOV        RAX,qword ptr [DAT_0237b650]                     = ??
+	//                  d9 c9 a8 01
+	//    008eec77      c7 83 90        MOV        dword ptr [RBX + 0x2f90],0xff7fffff
+	//                  2f 00 00
+	//                  ff ff 7f ff
+	//    008eec81      48 83 e8 01     SUB        RAX,0x1
+	uintptr_t invalidatebonecachesnippet = PatternFinder::FindPatternInModule(XORSTR("/client_client.so"),
+																(unsigned char*) XORSTR("\x48\x8b\x05\x00\x00\x00\x00\xc7\x83\x00\x00\x00\x00\xff\xff\x7f\xff\x48\x83\xe8\x01"),
+																XORSTR("xxx????xx????xxxxxxxx"));
+	
+	g_iModelBoneCounter = reinterpret_cast<unsigned long*>(GetAbsoluteAddress(invalidatebonecachesnippet, 3, 7));
 }
 
 void Hooker::FindSDLInput()
@@ -413,6 +468,95 @@ void Hooker::FindPlayerAnimStateOffset()
 																	  XORSTR( "xxxxxxxxxxxxxxx????xxx" ) );
 	Offsets::playerAnimStateOffset = *(unsigned int*)(C_CSPlayer__Spawn + 52);
 }
+
+void Hooker::FindPlayerAnimStateFunctions()
+{
+	//                             undefined __stdcall CreateAnimState(void * player)
+	//              undefined         AL:1           <RETURN>
+	//              void *            RDI:8          player
+	//                              CreateAnimState                                 XREF[5]:     00f6e179(c), 01aa23ec,
+	//                                                                                           01c6ccc0(*), 01e4cd29(*),
+	//                                                                                           01e4cd31(*)
+	//    00fcfd30      55              PUSH       RBP
+	//    00fcfd31      48 85 ff        TEST       player,player
+	//    00fcfd34      48 89 e5        MOV        RBP,RSP
+	//    00fcfd37      41 54           PUSH       R12
+	//    00fcfd39      53              PUSH       RBX
+	//    00fcfd3a      48 89 fb        MOV        RBX,player
+	//    00fcfd3d      74 0d           JZ         LAB_00fcfd4c
+	//    00fcfd3f      48 8b 07        MOV        RAX,qword ptr [player]
+	//                              LAB_00fcfd42                                    XREF[1]:     01e4cd27(*)
+	//    00fcfd42      ff 90 88        CALL       qword ptr [RAX + 0x688]
+	//                  06 00 00
+	//    00fcfd48      84 c0           TEST       AL,AL
+	//    00fcfd4a      75 24           JNZ        LAB_00fcfd70
+	//                              LAB_00fcfd4c                                    XREF[1]:     00fcfd3d(j)
+	//    00fcfd4c      45 31 e4        XOR        R12D,R12D
+	uintptr_t funcAddr = PatternFinder::FindPatternInModule( XORSTR( "/client_client.so" ),
+	                                                                  ( unsigned char* ) XORSTR("\x55\x48\x85\xff\x48\x89\xe5\x41\x54\x53\x48\x89\xfb\x74\x00\x48\x8b\x07\xff\x90\x00\x00\x00\x00\x84\xc0\x75\x00\x45\x31\xe4"),
+	                                                                  XORSTR( "xxxxxxxxxxxxxx?xxxxx????xxx?xxx" ) );
+	CreateAnimState = reinterpret_cast<CreateAnimStateFn>( funcAddr );
+	//                             void __stdcall Reset(void * this)
+	//              void              <VOID>         <RETURN>
+	//              void *            RDI:8          this
+	//              undefined4        Stack[-0x1c]:4 local_1c                                XREF[3]:     00fcf705(W),
+	//                                                                                                    00fcf70f(R),
+	//                                                                                                    00fcfa7c(R)
+	//                              CCSGOPlayerAnimState::Reset                     XREF[6]:     FUN_00f732c0:00f748dc(c),
+	//                                                                                           FUN_00f75020:00f7505d(c),
+	//                                                                                           FUN_00f7a110:00f7a1b7(c),
+	//                                                                                           CCSGOPlayerAnimState::CCSGOPlaye
+	//                                                                                           01aa23dc, 01c6cc68(*)
+	//    00fcf6d0      55              PUSH       RBP
+	//    00fcf6d1      48 8d 35        LEA        RSI,[DAT_019a4cc0]
+	//                  e8 55 9d 00
+	//    00fcf6d8      ba 01 00        MOV        EDX,0x1
+	//                  00 00
+	//    00fcf6dd      48 89 e5        MOV        RBP,RSP
+	//    00fcf6e0      53              PUSH       RBX
+	//    00fcf6e1      48 89 fb        MOV        RBX,this
+	//    00fcf6e4      48 83 ec 18     SUB        RSP,0x18
+	
+	uintptr_t funcAddr1 = PatternFinder::FindPatternInModule( XORSTR( "/client_client.so" ),
+                                                  ( unsigned char* ) XORSTR("\x55\x48\x8d\x35\x00\x00\x00\x00\xba\x01\x00\x00\x00\x48\x89\xe5\x53\x48\x89\xfb\x48\x83\xec\x18"),
+                                                  XORSTR( "xxxx????xxxxxxxxxxxxxxxx" ) );
+	AnimStateReset = reinterpret_cast<AnimStateResetFn>( funcAddr1 );
+	//                             void __stdcall CCSGOPlayerAnimState::Update(void * this,
+	//              void              <VOID>         <RETURN>
+	//              void *            RDI:8          this
+	//              float             XMM0_Da:4      eyeYaw
+	//              float             XMM1_Da:4      eyePitch
+	//              bool              SIL:1          bForce
+	//              undefined4        Stack[-0x30]:4 local_30                                XREF[1]:     00fcf518(W)
+	//              undefined4        Stack[-0x34]:4 local_34                                XREF[1]:     00fcf51f(W)
+	//              undefined4        Stack[-0x38]:4 local_38                                XREF[2]:     00fcf505(*),
+	//                                                                                                    00fcf509(W)
+	//              undefined4        Stack[-0x3c]:4 local_3c                                XREF[6]:     00fcf202(W),
+	//                                                                                                    00fcf221(R),
+	//                                                                                                    00fcf24b(W),
+	//                                                                                                    00fcf255(R),
+	//                                                                                                    00fcf2aa(W),
+	//                                                                                                    00fcf2c4(R)
+	//                              CCSGOPlayerAnimState::Update                    XREF[7]:     FUN_00f64f40:00f650b9(c),
+	//                                                                                           FUN_00f75020:00f75096(c),
+	//                                                                                           01aa23d4, 01c6cc38(*),
+	//                                                                                           01e4ccf9(*), 01e4cd05(*),
+	//                                                                                           01e4cd0a(*)
+	//    00fcf1f0      55              PUSH       RBP
+	//    00fcf1f1      48 89 e5        MOV        RBP,RSP
+	//    00fcf1f4      41 56           PUSH       R14
+	//    00fcf1f6      41 55           PUSH       R13
+	//    00fcf1f8      41 54           PUSH       R12
+	//    00fcf1fa      53              PUSH       RBX
+	//    00fcf1fb      48 89 fb        MOV        RBX,this
+	//    00fcf1fe      48 83 ec 20     SUB        RSP,0x20
+	//    00fcf202      f3 0f 11        MOVSS      dword ptr [RBP + local_3c],eyePitch
+	uintptr_t funcAddr2 = PatternFinder::FindPatternInModule( XORSTR( "/client_client.so" ),
+	                                                      ( unsigned char* ) XORSTR("\x55\x48\x89\xe5\x41\x56\x41\x55\x41\x54\x53\x48\x89\xfb\x48\x83\xec\x20\xf3\x0f\x11\x4d\xcc"),
+	                                                      XORSTR( "xxxxxxxxxxxxxxxxxxxxxxx" ) );
+	AnimStateUpdate = reinterpret_cast<AnimStateUpdateFn>( funcAddr2 );
+}
+
 
 void Hooker::FindPlayerAnimOverlayOffset( )
 {

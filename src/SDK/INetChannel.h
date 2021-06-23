@@ -328,7 +328,7 @@ public:
     virtual void RunFrame( double time ) = 0;
 
 
-    virtual void LogBadPacket( netpacket_t* packet ) = 0;
+    virtual void LogBadPacket( void*/*netpacket_t**/ packet ) = 0;
 
     // Address conversion
 //	virtual bool StringToAdr ( const char *s, netadr_t *a) = 0;

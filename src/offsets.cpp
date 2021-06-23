@@ -22,6 +22,12 @@ void Offsets::GetNetVarOffsets()
 	offsets.DT_BasePlayer.m_hViewModel = NetVarManager::GetOffset(tables, XORSTR("DT_BasePlayer"), XORSTR("m_hViewModel[0]"));
 	offsets.DT_BasePlayer.m_szLastPlaceName = NetVarManager::GetOffset(tables, XORSTR("DT_BasePlayer"), XORSTR("m_szLastPlaceName"));
 	offsets.DT_BasePlayer.deadflag = NetVarManager::GetOffset(tables, XORSTR("DT_BasePlayer"), XORSTR("deadflag"));
+	
+	offsets.DT_BaseAnimating.m_flPoseParameter = NetVarManager::GetOffset(tables, XORSTR("DT_BaseAnimating"), XORSTR("m_flPoseParameter"));
+	offsets.DT_BaseAnimating.m_nForceBone = NetVarManager::GetOffset(tables, XORSTR("DT_BaseAnimating"), XORSTR("m_nForceBone"));
+	offsets.DT_BaseAnimating.m_iMostRecentModelBoneCounter = offsets.DT_BaseAnimating.m_nForceBone + 4;
+	offsets.DT_BaseAnimating.m_hLightingOrigin = NetVarManager::GetOffset(tables, XORSTR("DT_BaseAnimating"), XORSTR("m_hLightingOrigin"));
+	offsets.DT_BaseAnimating.m_flLastBoneSetupTime = offsets.DT_BaseAnimating.m_hLightingOrigin - 56;
 
 	offsets.DT_BaseEntity.m_flAnimTime = NetVarManager::GetOffset(tables, XORSTR("DT_BaseEntity"), XORSTR("m_flAnimTime"));
 	offsets.DT_BaseEntity.m_flSimulationTime = NetVarManager::GetOffset(tables, XORSTR("DT_BaseEntity"), XORSTR("m_flSimulationTime"));
@@ -92,6 +98,7 @@ void Offsets::GetNetVarOffsets()
 	offsets.DT_CSPlayer.m_iShotsFired = NetVarManager::GetOffset(tables, XORSTR("DT_CSPlayer"), XORSTR("m_iShotsFired"));
 	offsets.DT_CSPlayer.m_angEyeAngles[0] = NetVarManager::GetOffset(tables, XORSTR("DT_CSPlayer"), XORSTR("m_angEyeAngles[0]"));
 	offsets.DT_CSPlayer.m_angEyeAngles[1] = NetVarManager::GetOffset(tables, XORSTR("DT_CSPlayer"), XORSTR("m_angEyeAngles[1]"));
+	offsets.DT_CSPlayer.m_iAddonBits = NetVarManager::GetOffset(tables, XORSTR("DT_CSPlayer"), XORSTR("m_iAddonBits"));
 	offsets.DT_CSPlayer.m_iAccount = NetVarManager::GetOffset(tables, XORSTR("DT_CSPlayer"), XORSTR("m_iAccount"));
 	offsets.DT_CSPlayer.m_totalHitsOnServer = NetVarManager::GetOffset(tables, XORSTR("DT_CSPlayer"), XORSTR("m_totalHitsOnServer"));
 	offsets.DT_CSPlayer.m_ArmorValue = NetVarManager::GetOffset(tables, XORSTR("DT_CSPlayer"), XORSTR("m_ArmorValue"));

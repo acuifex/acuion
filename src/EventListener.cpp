@@ -3,6 +3,7 @@
 #include "Hacks/aimbot.h"
 #include "Hacks/eventlog.h"
 #include "Hacks/votecast.h"
+#include "Hacks/autodisconnect.h"
 #include "Hacks/hitmarkers.h"
 #include "Hacks/namestealer.h"
 #include "Hacks/resolver.h"
@@ -34,6 +35,7 @@ void EventListener::FireGameEvent(IGameEvent* event)
     Spammer::FireGameEvent(event);
     ValveDSCheck::FireGameEvent(event);
     SkinChanger::FireGameEvent(event);
+    AutoDisconnect::FireGameEvent(event);
 }
 
 int EventListener::GetEventDebugID()

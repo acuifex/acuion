@@ -19,6 +19,8 @@ class ILauncherMgr;
 class ICommandLine;
 class KeyValues;
 class CBaseClientState;
+class C_BasePlayer;
+class CCSGOAnimState;
 struct CGlowObjectManager;
 
 /* function prototypes */
@@ -26,6 +28,7 @@ typedef IClientMode* (*GetClientModeFn) (void);
 typedef CGlowObjectManager* (*GlowObjectManagerFn) (void);
 typedef bool (*MsgFunc_ServerRankRevealAllFn) (void*);
 typedef void (*SendClanTagFn) (const char*, const char*);
+typedef void (*HostDisconnectFn) (bool);
 typedef void (*SetLocalPlayerReadyFn) (const char*);
 typedef ILauncherMgr* (*ILauncherMgrCreateFn) (void);
 typedef void (*StartDrawingFn) (void*);
@@ -41,6 +44,11 @@ typedef float (*RandomFloatExpFn)(float, float, float);
 typedef int (*RandomIntFn)(int, int);
 typedef float (*RandomGaussianFloatFn)(float, float);
 typedef bool (*SetNamedSkyBoxFn)(const char*);
+typedef CCSGOAnimState* (*CreateAnimStateFn)(C_BasePlayer*);
+typedef void (*AnimStateUpdateFn)(CCSGOAnimState*, float, float, bool);
+typedef void (*AnimStateResetFn)(CCSGOAnimState*);
+
+extern unsigned long* g_iModelBoneCounter; // i don't think this is the best place for it
 
 extern Vector lastRayStart;
 extern Vector lastRayEnd;

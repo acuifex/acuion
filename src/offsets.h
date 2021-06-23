@@ -21,6 +21,15 @@ struct COffsets
 		std::ptrdiff_t m_szLastPlaceName;
 		std::ptrdiff_t deadflag;
 	} DT_BasePlayer;
+	
+	struct
+	{
+		std::ptrdiff_t m_flPoseParameter;
+		std::ptrdiff_t m_nForceBone;
+		std::ptrdiff_t m_iMostRecentModelBoneCounter;
+		std::ptrdiff_t m_hLightingOrigin;
+		std::ptrdiff_t m_flLastBoneSetupTime;
+	} DT_BaseAnimating;
 
 	struct
 	{
@@ -107,6 +116,7 @@ struct COffsets
 	{
 		std::ptrdiff_t m_iShotsFired;
 		std::ptrdiff_t m_angEyeAngles[2];
+		std::ptrdiff_t m_iAddonBits;
 		std::ptrdiff_t m_iAccount;
 		std::ptrdiff_t m_totalHitsOnServer;
 		std::ptrdiff_t m_ArmorValue;

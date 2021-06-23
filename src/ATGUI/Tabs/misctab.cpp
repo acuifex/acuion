@@ -539,6 +539,7 @@ void Misc::RenderTab()
 				ImGui::Checkbox(XORSTR("Silent Defuse"), &Settings::AutoDefuse::silent);
 				ImGui::Checkbox(XORSTR("Attempt NoFall"), &Settings::NoFall::enabled);
 				ImGui::SliderFloat(XORSTR("##BTWINDOW"), &Settings::LagComp::window, 0.f, 200.f, XORSTR("ms: %0.f"));
+				ImGui::Checkbox(XORSTR("Auto Disconnect"), &Settings::AutoDisconnect::enabled);
 			}
 			ImGui::Columns(1);
 			ImGui::Separator();

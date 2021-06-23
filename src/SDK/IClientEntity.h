@@ -73,6 +73,16 @@ enum DataUpdateType_t
 class AnimationLayer
 {
 public:
+    bool operator==(const AnimationLayer& rhs) const
+    {
+	return pad_0000 == rhs.pad_0000 && m_nOrder == rhs.m_nOrder && m_nSequence == rhs.m_nSequence && m_flPrevCycle == rhs.m_flPrevCycle && m_flWeight == rhs.m_flWeight && m_flWeightDeltaRate == rhs.m_flWeightDeltaRate && m_flPlaybackRate == rhs.m_flPlaybackRate && m_flCycle == rhs.m_flCycle && m_pOwner == rhs.m_pOwner && pad_0038 == rhs.pad_0038;
+    }
+    bool operator!=(const AnimationLayer& rhs) const
+    {
+	return !(rhs == *this);
+    }
+
+public:
     char pad_0000[24];
     int m_nOrder;
     int m_nSequence; // 0x1C
@@ -223,6 +233,11 @@ public:
 	{
 		return *(float*)((uintptr_t)this + offsets.DT_BaseEntity.m_flSimulationTime);
 	}
+	
+	float GetOldSimulationTime()
+	{
+		return *(float*)((uintptr_t)this + offsets.DT_BaseEntity.m_flSimulationTime + 4);
+	}
 
 	TeamID GetTeam()
 	{
@@ -283,7 +298,18 @@ public:
     {
         return *reinterpret_cast<CCSGOAnimState**>((uintptr_t)this + Offsets::playerAnimStateOffset);
     }
-
+    
+    float* GetPoseParameters() // 24 entries. i'm lazy to do this correct way.
+    {
+        return (float*)((uintptr_t)this + offsets.DT_BaseAnimating.m_flPoseParameter);
+    }
+	
+	void InvalidateBoneCache()
+	{
+		*(float*)((uintptr_t)this + offsets.DT_BaseAnimating.m_flLastBoneSetupTime) = 0xff7fffff; // -flt_max
+		*(unsigned long*)((uintptr_t)this + offsets.DT_BaseAnimating.m_iMostRecentModelBoneCounter) = (*g_iModelBoneCounter) - 1;
+	}
+    
 	QAngle* GetViewPunchAngle()
 	{
 		return (QAngle*)((uintptr_t)this + offsets.DT_BasePlayer.m_viewPunchAngle);
@@ -352,6 +378,11 @@ public:
 	QAngle* GetEyeAngles()
 	{
 		return (QAngle*)((uintptr_t)this + offsets.DT_CSPlayer.m_angEyeAngles[0]);
+	}
+	
+	float GetSpawnTime()
+	{
+		return *(float*)((uintptr_t)this + offsets.DT_CSPlayer.m_iAddonBits - 4); // this is some next level laziness
 	}
 
 	int GetMoney()

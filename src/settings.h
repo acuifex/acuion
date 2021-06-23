@@ -1301,6 +1301,11 @@ namespace Settings
 	{
 		inline bool enabled = false;
 	}
+	
+	namespace AutoDisconnect
+	{
+		inline bool enabled = false;
+	}
 
 	namespace GrenadeHelper
 	{

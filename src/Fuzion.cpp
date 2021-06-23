@@ -44,6 +44,7 @@ void MainThread()
 	Hooker::FindGameRules();
 	Hooker::FindRankReveal();
 	Hooker::FindSendClanTag();
+	Hooker::FindHostDisconnect();
 	Hooker::FindPrediction();
 	Hooker::FindSetLocalPlayerReady();
 	Hooker::FindSurfaceDrawing();
@@ -53,8 +54,10 @@ void MainThread()
 	Hooker::FindLoadFromBuffer();
 	Hooker::FindVstdlibFunctions();
 	Hooker::FindOverridePostProcessingDisable();
+	Hooker::FindModelBoneCounter();
     Hooker::FindPanelArrayOffset();
     Hooker::FindPlayerAnimStateOffset();
+	Hooker::FindPlayerAnimStateFunctions();
     Hooker::FindPlayerAnimOverlayOffset();
     Hooker::FindSequenceActivity();
     Hooker::FindAbsFunctions();
@@ -123,7 +126,24 @@ void MainThread()
     viewRenderVMT->HookVM(Hooks::RenderSmokePostViewmodel, 42);
     viewRenderVMT->ApplyVMT();
     
-	eventListener = new EventListener({ XORSTR("cs_game_disconnected"), XORSTR("player_connect_full"), XORSTR("player_death"), XORSTR("item_purchase"), XORSTR("item_remove"), XORSTR("item_pickup"), XORSTR("player_hurt"), XORSTR("bomb_begindefuse"), XORSTR("enter_bombzone"), XORSTR("bomb_beginplant"), XORSTR("switch_team"), XORSTR("vote_cast") });
+	eventListener = new EventListener({
+		XORSTR("cs_game_disconnected"),
+		XORSTR("player_connect_full"),
+		XORSTR("player_death"),
+		XORSTR("item_purchase"),
+		XORSTR("item_remove"),
+		XORSTR("item_pickup"),
+		XORSTR("player_hurt"),
+		XORSTR("bomb_begindefuse"),
+		XORSTR("enter_bombzone"),
+		XORSTR("bomb_beginplant"),
+		XORSTR("switch_team"),
+		XORSTR("vote_cast"),
+		XORSTR("cs_intermission"),
+		// XORSTR("announce_phase_end"),
+		// XORSTR("cs_match_end_restart"),
+		// XORSTR("cs_win_panel_match")
+	});
 
     if (Hooker::HookRecvProp(XORSTR("CBaseViewModel"), XORSTR("m_nSequence"), SkinChanger::sequenceHook))
 	    SkinChanger::sequenceHook->SetProxyFunction((RecvVarProxyFn) SkinChanger::SetViewModelSequence);

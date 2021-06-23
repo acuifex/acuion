@@ -595,6 +595,8 @@ void Settings::LoadDefaultsOrSave(std::string path)
 	LoadColor(settings[XORSTR("ASUSWalls")][XORSTR("color")], Settings::ASUSWalls::color);
 
 	settings[XORSTR("NoScopeBorder")][XORSTR("enabled")] = Settings::NoScopeBorder::enabled;
+	
+	settings[XORSTR("AutoDisconnect")][XORSTR("enabled")] = Settings::AutoDisconnect::enabled;
 
 	settings[XORSTR("SniperCrosshair")][XORSTR("enabled")] = Settings::SniperCrosshair::enabled;
 
@@ -1165,6 +1167,7 @@ void Settings::LoadConfig(std::string path)
 	GetVal(settings[XORSTR("ASUSWalls")][XORSTR("color")], &Settings::ASUSWalls::color);
 
 	GetVal(settings[XORSTR("NoScopeBorder")][XORSTR("enabled")], &Settings::NoScopeBorder::enabled);
+	GetVal(settings[XORSTR("AutoDisconnect")][XORSTR("enabled")], &Settings::AutoDisconnect::enabled);
 
 	GetVal(settings[XORSTR("SniperCrosshair")][XORSTR("enabled")], &Settings::SniperCrosshair::enabled);
 

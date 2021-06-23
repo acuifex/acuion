@@ -21,6 +21,7 @@
 #include "IClientEntity.h"
 #include "ISurface.h"
 #include "IVDebugOverlay.h"
+#include "INetChannel.h"
 #include "IEngineClient.h"
 #include "IVPanel.h"
 #include "IVModelInfo.h"
