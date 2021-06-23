@@ -3,6 +3,7 @@
 #include "../interfaces.h"
 
 #include "../Hacks/bhop.h"
+#include "../Hacks/chams.h"
 #include "../Hacks/noduckcooldown.h"
 #include "../Hacks/lagcomp.h"
 #include "../Hacks/autostrafe.h"
@@ -69,6 +70,7 @@ bool Hooks::CreateMove(void* thisptr, float flInputSampleTime, CUserCmd* cmd)
 			ESP::CreateMove(cmd);
 			TracerEffect::CreateMove(cmd);
             ThirdPerson::CreateMove(cmd);
+            Chams::CreateMove(cmd);
             KeyFix::CreateMove(cmd);
 		PredictionSystem::EndPrediction();
 

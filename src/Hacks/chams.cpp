@@ -2,10 +2,14 @@
 
 #include "lagcomp.h"
 
+#include <algorithm>
 #include "../Utils/xorstring.h"
 #include "../Utils/entity.h"
 #include "../settings.h"
 #include "../interfaces.h"
+
+
+#include "../Utils/draw.h"
 
 IMaterial* materialChams;
 IMaterial* materialChamsIgnorez;
@@ -13,6 +17,8 @@ IMaterial* materialChamsFlat;
 IMaterial* materialChamsFlatIgnorez;
 IMaterial* materialChamsArms;
 IMaterial* materialChamsWeapons;
+matrix3x4_t fake_matrix[128];
+QAngle currentAngle;
 
 typedef void (*DrawModelExecuteFn) (void*, void*, void*, const ModelRenderInfo_t&, matrix3x4_t*);
 
@@ -209,6 +215,35 @@ static void DrawArms(const ModelRenderInfo_t& pInfo)
 	modelRender->ForcedMaterialOverride(mat);
 }
 
+static void DrawPlayerReal(void* thisptr, void* context, void *state, const ModelRenderInfo_t &pInfo, matrix3x4_t* pCustomBoneToWorld)
+{
+	C_BasePlayer* localplayer = (C_BasePlayer*) entityList->GetClientEntity(engine->GetLocalPlayer());
+	if (!localplayer || !localplayer->GetAlive())
+		return;
+	
+	C_BasePlayer* entity = (C_BasePlayer*) entityList->GetClientEntity(pInfo.entity_index);
+	if (!entity || !entity->GetAlive())
+		return;
+	
+	if (entity != localplayer)
+		return;
+
+	if (!fake_matrix)
+		return;
+	
+	IMaterial* visible_material = materialChams;
+
+	Color visColor = Color(255,0,0);
+	
+	visible_material->ColorModulate(visColor);
+	
+	visible_material->AlphaModulate(1);
+	
+	modelRender->ForcedMaterialOverride(visible_material);
+	modelRenderVMT->GetOriginalMethod<DrawModelExecuteFn>(21)(thisptr, context, state, pInfo, fake_matrix);
+
+}
+
 void Chams::DrawModelExecute(void* thisptr, void* context, void *state, const ModelRenderInfo_t &pInfo, matrix3x4_t* pCustomBoneToWorld)
 {
 	if (!engine->IsInGame())
@@ -237,6 +272,7 @@ void Chams::DrawModelExecute(void* thisptr, void* context, void *state, const Mo
 	if (strstr(modelName, XORSTR("models/player")))
 	{
 		DrawRecord(thisptr, context, state, pInfo, pCustomBoneToWorld);
+		// DrawPlayerReal(thisptr, context, state, pInfo, pCustomBoneToWorld);
 		DrawPlayer(thisptr, context, state, pInfo, pCustomBoneToWorld);
 	}
 	else if (strstr(modelName, XORSTR("arms")))
@@ -247,4 +283,94 @@ void Chams::DrawModelExecute(void* thisptr, void* context, void *state, const Mo
 	{
 		DrawWeapon(pInfo);
 	}
+}
+
+void Chams::CreateMove(CUserCmd* cmd){
+	currentAngle = cmd->viewangles;
+}
+
+void Chams::FrameStageNotify(ClientFrameStage_t stage) // blatant c+p https://www.unknowncheats.me/forum/counterstrike-global-offensive/353751-proper-desync-chams.html
+{
+    // return;
+    if (stage != ClientFrameStage_t::FRAME_RENDER_START)
+	return;
+
+    if (!engine->IsInGame())
+	return;
+
+    C_BasePlayer* localplayer = (C_BasePlayer*)entityList->GetClientEntity(engine->GetLocalPlayer());
+    if (!localplayer || !localplayer->GetAlive())
+	return;
+
+    static CBaseHandle* handle = localplayer->GetRefEHandle();
+    static float spawntime = localplayer->GetSpawnTime();
+    static CCSGOAnimState* fake_anim_state = nullptr;
+
+    bool allocate = (!fake_anim_state);
+    bool change = (!allocate) && (localplayer->GetRefEHandle() != handle);
+    bool reset = (!allocate && !change) && (localplayer->GetSpawnTime() != spawntime);
+
+    if (change)
+    {
+	free(fake_anim_state);
+	fake_anim_state = nullptr;
+    }
+
+    if (reset)
+    {
+	AnimStateReset(fake_anim_state);
+
+	spawntime = localplayer->GetSpawnTime();
+    }
+
+    if (allocate || change)
+    {
+	fake_anim_state = CreateAnimState(localplayer);
+
+	handle = localplayer->GetRefEHandle();
+	spawntime = localplayer->GetSpawnTime();
+    }
+    else if (localplayer->GetSimulationTime() != localplayer->GetOldSimulationTime())
+    {
+	std::array<AnimationLayer, 15> networked_layers;
+	std::copy_n(localplayer->GetAnimOverlay()->m_Memory.m_pMemory, 15, networked_layers.begin());
+
+	QAngle backup_abs_angles = localplayer->GetAbsAngles();
+
+	float backup_poses[24];
+	// std::copy(localplayer->GetPoseParameters(), localplayer->GetPoseParameters() + 24, backup_poses);
+        for ( int i=0;i<24;i++ )
+        {
+            backup_poses[i] = localplayer->GetPoseParameters()[i];
+        }
+
+	AnimStateUpdate(fake_anim_state, 0.0f, 1.0f, false);
+	localplayer->InvalidateBoneCache();
+	// localplayer->SetupBones(fake_matrix, 128, 0x7FF00, globalVars->curtime);
+
+	std::copy(networked_layers.begin(), networked_layers.end(), localplayer->GetAnimOverlay()->m_Memory.m_pMemory);
+	// std::copy(backup_poses, backup_poses + 24, localplayer->GetPoseParameters());
+
+        for ( int i=0;i<24;i++ )
+        {
+            localplayer->GetPoseParameters()[i] = backup_poses[i];
+        }
+
+	QAngle& fuck = const_cast<QAngle&>(localplayer->GetAbsAngles());
+	fuck = backup_abs_angles;
+
+	if (localplayer->GetAbsAngles() != backup_abs_angles)
+	    cvar->ConsoleColorPrintf(ColorRGBA(0, 225, 0), XORSTR("abs angles are different!\n"));
+
+	if (std::equal(networked_layers.begin(), networked_layers.end(), localplayer->GetAnimOverlay()->m_Memory.m_pMemory))
+	    cvar->ConsoleColorPrintf(ColorRGBA(0, 225, 0), XORSTR("networked layers are different! (animoverlay size is %d btw)\n"), localplayer->GetAnimOverlay()->Count());
+
+        for ( int i=0;i<24;i++ )
+        {
+	    if(localplayer->GetPoseParameters()[i] != backup_poses[i])
+                cvar->ConsoleColorPrintf(ColorRGBA(0, 225, 0), XORSTR("poses are different! index: %d was: %f now: %f\n"), i, backup_poses[i], localplayer->GetPoseParameters()[i]);
+        }
+        // if (std::equal(std::begin(backup_poses), std::end(backup_poses), localplayer->GetPoseParameters()))
+	//     cvar->ConsoleColorPrintf(ColorRGBA(0, 225, 0), XORSTR("poses are different!\n"));
+    }
 }

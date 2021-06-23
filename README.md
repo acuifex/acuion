@@ -22,6 +22,7 @@ https://github.com/acuifex/acuion-personal-configs
 * Profile changer (only shows in game for me) [#16](../../issues/16)
 * Ban and unbox names (a bit buggy) [#16](../../issues/16)
 * AutoDisconnect
+* Fake chams base, commented out because some value in animstate gets overwriten by setupbones iirc
 
 # Original fuzion readme
 <p align="center">
