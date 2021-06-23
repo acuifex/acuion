@@ -7,6 +7,7 @@
 #include "../settings.h"
 
 #include <deque>
+#include <mutex>
 
 enum ImFontFlags
 {
@@ -42,6 +43,7 @@ struct DrawRequest
 namespace Draw {
 
 	extern std::deque<DrawRequest> drawRequests;
+	extern std::mutex m_draw;
 
 	// Surface
 	void Circle( Vector2D position, int segments, float radius, Color color );

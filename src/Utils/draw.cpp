@@ -6,7 +6,10 @@
 #include "../ImGUI/imgui_internal.h"
 #include "../Hacks/esp.h"
 
+#include <mutex>
+
 std::deque<DrawRequest> Draw::drawRequests = {};
+std::mutex Draw::m_draw;
 
 void Draw::Circle( Vector2D position, int segments, float radius, Color color ) {
 	float step = ( float ) M_PI * 2.0f / ( float )segments;
@@ -234,7 +237,8 @@ void Draw::AddLine( int x0, int y0, int x1, int y1, ImColor color ) {
     req.x1 = x1;
     req.y1 = y1;
     req.color = color;
-
+    
+	std::lock_guard<std::mutex> guard(m_draw);
     drawRequests.push_back( req );
 }
 
@@ -246,7 +250,8 @@ void Draw::AddRect( int x0, int y0, int x1, int y1, ImColor color ) {
     req.x1 = x1;
     req.y1 = y1;
     req.color = color;
-
+	
+	std::lock_guard<std::mutex> guard(m_draw);
     drawRequests.push_back( req );
 }
 
@@ -258,7 +263,8 @@ void Draw::AddRectFilled( int x0, int y0, int x1, int y1, ImColor color ) {
     req.x1 = x1;
     req.y1 = y1;
     req.color = color;
-
+	
+	std::lock_guard<std::mutex> guard(m_draw);
     drawRequests.push_back( req );
 }
 
@@ -271,7 +277,8 @@ void Draw::AddCircle( int x0, int y0, float radius, ImColor color, int segments,
     req.circleSegments = segments;
     req.thickness = thickness;
     req.color = color;
-
+	
+	std::lock_guard<std::mutex> guard(m_draw);
     drawRequests.push_back( req );
 }
 
@@ -283,7 +290,8 @@ void Draw::AddCircleFilled( int x0, int y0, float radius, ImColor color, int seg
     req.circleRadius = radius;
     req.circleSegments = segments;
     req.color = color;
-
+	
+	std::lock_guard<std::mutex> guard(m_draw);
     drawRequests.push_back( req );
 }
 
@@ -294,7 +302,8 @@ void Draw::AddCircle3D( const Vector &pos3D, float radius, ImColor color, int se
     req.circleRadius = radius;
     req.circleSegments = segments;
     req.color = color;
-
+	
+	std::lock_guard<std::mutex> guard(m_draw);
     drawRequests.push_back( req );
 }
 
@@ -309,6 +318,7 @@ void Draw::AddText( int x0, int y0, const char *text, ImColor color, ImFontFlags
     req.y0 = y0;
     req.color = color;
     req.fontflags = flags;
-
+	
+	std::lock_guard<std::mutex> guard(m_draw);
     drawRequests.push_back( req );
 }

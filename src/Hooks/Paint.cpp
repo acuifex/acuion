@@ -14,7 +14,7 @@
 #include "../Hacks/eventlog.h"
 #include "../Hacks/angleindicator.h"
 
-#include <mutex>
+// #include <mutex>
 
 extern StartDrawingFn StartDrawing;
 extern FinishDrawingFn FinishDrawing;
@@ -24,14 +24,14 @@ int Paint::engineHeight;
 int Paint::windowWidth;
 int Paint::windowHeight;
 
-std::mutex drawMutex;
+// std::mutex drawMutex;
 
 
 typedef void (*PaintFn) (void*, PaintMode_t);
 
 void Hooks::Paint(void* thisptr, PaintMode_t mode)
 {
-	engineVGuiVMT->GetOriginalMethod<PaintFn>(15)(thisptr, mode);
+    engineVGuiVMT->GetOriginalMethod<PaintFn>(15)(thisptr, mode);
 
     engine->GetScreenSize(Paint::engineWidth,Paint::engineHeight );
 
@@ -40,7 +40,9 @@ void Hooks::Paint(void* thisptr, PaintMode_t mode)
 
 	if (mode & PAINT_UIPANELS)
 	{
+        std::unique_lock<std::mutex> lock( Draw::m_draw );
         int prevRecords = Draw::drawRequests.size(); // # of requests from last call
+	lock.unlock();
 
         ESP::PaintToUpdateMatrix(); // Just for updating the viewMatrix
         /* These functions make drawRequests */
@@ -55,6 +57,7 @@ void Hooks::Paint(void* thisptr, PaintMode_t mode)
 
         if( Settings::ESP::backend == DrawingBackend::SURFACE ){
             StartDrawing(surface);
+	    lock.lock();
             for( const DrawRequest &value : Draw::drawRequests ){
                 switch( value.type ){
                     case DRAW_LINE:
@@ -80,9 +83,11 @@ void Hooks::Paint(void* thisptr, PaintMode_t mode)
                         break;
                 }
             }
+	    lock.unlock();
             FinishDrawing(surface);
         }
-        std::unique_lock<std::mutex> lock( drawMutex );
+        // std::unique_lock<std::mutex> lock( drawMutex );
+        lock.lock();
         Draw::drawRequests.erase( Draw::drawRequests.begin( ), Draw::drawRequests.begin( ) + prevRecords );
     }
 }
@@ -92,13 +97,14 @@ void Hooks::PaintImGui()
 	if( Settings::ESP::backend != DrawingBackend::IMGUI )
         return;
 
-    std::unique_lock<std::mutex> lock( drawMutex );
+    // std::unique_lock<std::mutex> lock( drawMutex );
 
     float width = (float)Paint::engineWidth;
     float height = (float)Paint::engineHeight;
     float imWidth = Paint::windowWidth;
     float imHeight = Paint::windowHeight;
-
+    
+    std::unique_lock<std::mutex> lock( Draw::m_draw );
     for( const DrawRequest &value : Draw::drawRequests ){
         /* Convert in case there are stretched resolution users - DONT write to original struct! */
         int x0 = (int)((value.x0 / width) * imWidth);
@@ -133,4 +139,5 @@ void Hooks::PaintImGui()
                 break;
         }
     }
+    lock.unlock();
 }
